@@ -13,10 +13,11 @@ void Player::render() const {
     Rectangle r = {m_position.x, m_position.y, 10, 10};
     float angle = std::atan2(m_direction.y, m_direction.x) * RAD2DEG;
     DrawRectanglePro(r, {r.width / 2, r.height / 2}, angle, RED);
-    DrawLineV(m_position, {
-        m_position.x + m_direction.x * 100,
-        m_position.y + m_direction.y * 100
-    }, YELLOW);
+
+//    DrawLineV(m_position, {
+//        m_position.x + m_direction.x * 100,
+//        m_position.y + m_direction.y * 100
+//    }, YELLOW);
 }
 
 void Player::update() {
@@ -50,9 +51,23 @@ void Player::update() {
             .y = mousePos.y - m_position.y
     };
 
-    float magnitude = std::sqrtf(std::powf(dir.x, 2) + std::powf(dir.y, 2));
+    float magnitude = std::sqrt(std::pow(dir.x, 2) + std::pow(dir.y, 2));
     m_direction = {
             .x = dir.x / magnitude,
             .y = dir.y / magnitude
     };
+
+
+}
+
+const Vector2 &Player::getPosition() const {
+    return m_position;
+}
+
+const Vector2 &Player::getDirection() const {
+    return m_direction;
+}
+
+const Vector2 &Player::getPlane() const {
+    return m_plane;
 }

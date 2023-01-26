@@ -21,7 +21,7 @@ private:
     void render();
 
     Window m_window;
-    Map m_map = Map("/Users/jgravier/dev/wolf/first.map");
+    Map m_map = Map("../first.map");
     Player m_player;
 
 };
