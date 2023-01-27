@@ -11,5 +11,7 @@ class Config {
 public:
     constexpr static const Vector2 windowSize = {800, 600};
     constexpr static const uint8_t maxFPS = 60;
-    constexpr static const float fieldOfView = 60.0f;
+    constexpr static const float fieldOfView = 70.0f;
+    constexpr static const float mapScale = 2.0f;
+    constexpr static const float rotationSpeed = 2.0f;
 };

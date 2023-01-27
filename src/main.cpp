@@ -3,7 +3,6 @@
 //
 
 #include "Game.h"
-#include "Map.h"
 
 int main(int argc, char *argv[]) {
     Game game;

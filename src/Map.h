@@ -14,16 +14,27 @@ public:
 
     bool isValid() const;
     Vector2 getSpawnPoint() const;
+
     uint8_t getWidth() const;
     uint8_t getHeight() const;
-    char get(uint8_t x, uint8_t y) const;
 
+    int getCellWidth() const;
+    int getCellHeight() const;
+
+    char get(uint8_t x, uint8_t y) const;
     void render() const;
 
 private:
-    std::vector<char> m_data;
-    bool m_valid = false;
-    uint8_t m_width = 0;
-    uint8_t m_height = 0;
-    Vector2 m_spawnPoint = { };
+    std::vector<char> mData;
+    bool mValid = false;
+
+    uint8_t mWidth = 0;
+    uint8_t mHeight = 0;
+
+    Vector2 mSpawnPoint = { };
+
+    int mCellWidth = 0;
+
+private:
+    int mCellHeight = 0;
 };

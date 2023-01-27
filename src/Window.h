@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 class Window {
 public:
     explicit Window();

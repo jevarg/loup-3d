@@ -20,8 +20,7 @@ private:
     void update();
     void render();
 
-    Window m_window;
-    Map m_map = Map("../first.map");
-    Player m_player;
-
+    Window mWindow;
+    Map mMap = Map("../first.map");
+    Player mPlayer;
 };

@@ -21,22 +21,22 @@ Map::Map(const std::string &filePath) {
     bool spawnPointFound = false;
 
     while(std::getline(file, line)) {
-        m_height++;
-        if (!m_width) {
-            m_width = line.length();
+        mHeight++;
+        if (!mWidth) {
+            mWidth = line.length();
         }
 
-        if (m_width != line.length()) {
+        if (mWidth != line.length()) {
             std::cerr << "Invalid map!" << std::endl;
             return;
         }
 
         uint8_t x = 0;
         for (char c : line) {
-            m_data.push_back(c);
+            mData.push_back(c);
             if (c == '2' && !spawnPointFound) {
-                m_spawnPoint.x = x;
-                m_spawnPoint.y = y;
+                mSpawnPoint.x = x;
+                mSpawnPoint.y = y;
                 spawnPointFound = true;
             }
 
@@ -46,46 +46,46 @@ Map::Map(const std::string &filePath) {
         y++;
     }
 
-    printf("Dimensions: %dx%d\n", m_width, m_height);
-    printf("Spawn point: (%f, %f)\n", m_spawnPoint.x, m_spawnPoint.y);
-    m_valid = true;
+    printf("Dimensions: %dx%d\n", mWidth, mHeight);
+    printf("Spawn point: (%f, %f)\n", mSpawnPoint.x, mSpawnPoint.y);
+    mValid = true;
 
     file.close();
+
+    mCellWidth = mWidth * Config::mapScale;
+    mCellHeight = mHeight * Config::mapScale;
 }
 
 bool Map::isValid() const {
-    return m_valid;
+    return mValid;
 }
 
 char Map::get(uint8_t x, uint8_t y) const {
-    int pos = (y * m_width) + x;
-    if (pos > m_data.size()) {
+    int pos = (y * mWidth) + x;
+    if (pos > mData.size()) {
         printf("Invalid position: (%d, %d)\n", x, y);
         return 0;
     }
 
-    return m_data[pos];
+    return mData[pos];
 }
 
 Vector2 Map::getSpawnPoint() const {
-    return m_spawnPoint;
+    return mSpawnPoint;
 }
 
 uint8_t Map::getWidth() const {
-    return m_width;
+    return mWidth;
 }
 
 uint8_t Map::getHeight() const {
-    return m_height;
+    return mHeight;
 }
 
 void Map::render() const {
-    auto blockWidth = Config::windowSize.x / m_width;
-    auto blockHeight = Config::windowSize.y / m_height;
-
-    for (int i = 0; i < m_data.size(); i++) {
+    for (int i = 0; i < mData.size(); i++) {
         Color color;
-        switch (m_data[i]) {
+        switch (mData[i]) {
             case '1':
                 color = BLUE;
                 break;
@@ -93,17 +93,25 @@ void Map::render() const {
                 continue;
         }
 
-        int x = (i % m_width) * blockWidth;
-        int y = (i / m_width) * blockHeight;
+        int x = (i % mWidth) * mCellWidth;
+        int y = (i / mWidth) * mCellHeight;
 
-        DrawRectangle(x, y,blockWidth, blockHeight, color);
+        DrawRectangle(x, y,mCellWidth, mCellHeight, color);
     }
 
-    for (uint8_t i = 0; i < m_width; ++i) {
-        DrawLine(i * blockWidth, 0, i * blockWidth, Config::windowSize.y, WHITE);
+    for (uint8_t i = 0; i < mWidth; ++i) {
+        DrawLine(i * mCellWidth, 0, i * mCellWidth, mHeight * mCellHeight, WHITE);
     }
 
-    for (uint8_t i = 0; i < m_height; ++i) {
-        DrawLine(0, i * blockHeight, Config::windowSize.x, i * blockHeight, WHITE);
+    for (uint8_t i = 0; i < mHeight; ++i) {
+        DrawLine(0, i * mCellHeight, mWidth * mCellWidth, i * mCellHeight, WHITE);
     }
+}
+
+int Map::getCellWidth() const {
+    return mCellWidth;
+}
+
+int Map::getCellHeight() const {
+    return mCellHeight;
 }
