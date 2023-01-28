@@ -90,21 +90,14 @@ void Map::render() const {
                 color = BLUE;
                 break;
             default:
-                continue;
+                color = WHITE;
+                break;
         }
 
         int x = (i % mWidth) * mCellWidth;
         int y = (i / mWidth) * mCellHeight;
 
         DrawRectangle(x, y,mCellWidth, mCellHeight, color);
-    }
-
-    for (uint8_t i = 0; i < mWidth; ++i) {
-        DrawLine(i * mCellWidth, 0, i * mCellWidth, mHeight * mCellHeight, WHITE);
-    }
-
-    for (uint8_t i = 0; i < mHeight; ++i) {
-        DrawLine(0, i * mCellHeight, mWidth * mCellWidth, i * mCellHeight, WHITE);
     }
 }
 

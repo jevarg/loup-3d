@@ -7,10 +7,11 @@
 #include "Window.h"
 #include "Map.h"
 #include "Player.h"
+#include "Raycaster.h"
 
 class Game {
 public:
-    Game() = default;
+    explicit Game();
     ~Game() = default;
 
     void start();
@@ -21,6 +22,7 @@ private:
     void render();
 
     Window mWindow;
-    Map mMap = Map("../first.map");
+    Map mMap;
+    Raycaster mRaycaster;
     Player mPlayer;
 };

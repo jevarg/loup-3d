@@ -34,7 +34,5 @@ private:
     Vector2 mSpawnPoint = { };
 
     int mCellWidth = 0;
-
-private:
     int mCellHeight = 0;
 };

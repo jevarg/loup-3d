@@ -4,7 +4,15 @@
 
 #pragma once
 
+#include "Player.h"
+#include "Map.h"
 
 class Raycaster {
+public:
+    explicit Raycaster(const Map &map, const Player &player);
+    void render() const;
 
+private:
+    const Map &mMap;
+    const Player &mPlayer;
 };

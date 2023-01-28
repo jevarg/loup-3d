@@ -15,10 +15,6 @@ void Player::render() const {
     Rectangle r = {mPosition.x, mPosition.y, 10, 10};
     float angle = std::atan2(mDirection.y, mDirection.x) * RAD2DEG;
     DrawRectanglePro(r, {r.width / 2, r.height / 2}, angle, RED);
-
-    DrawLineV(mPosition,
-              {mPosition.x + mDirection.x * 100,  mPosition.y + mDirection.y * 100},
-              YELLOW);
 }
 
 void Player::update() {
@@ -43,18 +39,23 @@ void Player::update() {
     }
 
     float angle;
+    bool didRotate = false;
     if (IsKeyDown(KEY_RIGHT)) {
         angle = Config::rotationSpeed * DEG2RAD;
+        didRotate = true;
     }
 
     if (IsKeyDown(KEY_LEFT)) {
         angle = -Config::rotationSpeed * DEG2RAD;
+        didRotate = true;
     }
 
-    mDirection = {
-            mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
-            mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
-    };
+    if (didRotate) {
+        mDirection = {
+                mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
+                mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
+        };
+    }
 }
 
 const Vector2 &Player::getPosition() const {
