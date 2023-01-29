@@ -9,7 +9,7 @@
 
 Raycaster::Raycaster(const Map &map, const Player &player) : mMap(map), mPlayer(player) {}
 
-void Raycaster::render() const {
+void Raycaster::render(const Texture2D &wallTex) const {
     Vector2 dir = mPlayer.getDirection();
     Vector2 playerPos = mPlayer.getPosition();
     Vector2 pos = {
@@ -70,10 +70,23 @@ void Raycaster::render() const {
         }
 
         float perpWallDist;
+        float wallX;
         if (!side) {
             perpWallDist = (sideDistX - deltaX);
+            wallX = pos.y + perpWallDist * rayDir.y;
         } else {
             perpWallDist = (sideDistY - deltaY);
+            wallX = pos.x + perpWallDist * rayDir.x;
+        }
+
+        wallX -= std::floor(wallX);
+        int texX = static_cast<int>(wallX * wallTex.width);
+
+        if (side == 0 && rayDir.x > 0) {
+            texX = wallTex.width - texX - 1;
+        }
+        if (side == 1 && rayDir.y < 0) {
+            texX = wallTex.width - texX - 1;
         }
 
         int wallHeight = static_cast<int>(Config::windowSize.y / perpWallDist);
@@ -81,7 +94,16 @@ void Raycaster::render() const {
         int drawEnd = std::min(static_cast<int>(Config::windowSize.y) - 1,
                                wallHeight / 2 + static_cast<int>(Config::windowSize.y) / 2);
 
-        DrawCircle(cellX * mMap.getCellWidth(), cellY * mMap.getCellHeight(), 5, RED);
-        DrawLine(x, drawStart, x, drawEnd, BLUE);
+        Rectangle rectSrc = {static_cast<float>(texX), 0, 1.0, static_cast<float>(wallTex.height)};
+        Rectangle rectDst = {static_cast<float>(x), static_cast<float>(drawStart), 1, static_cast<float>(drawEnd - drawStart)};
+
+        uint8_t colorModifier = 255 - static_cast<uint8_t>(perpWallDist * 7) % 100;
+//        printf("%f, %d\n", perpWallDist, colorModifier);
+        Color tint = {colorModifier, colorModifier, colorModifier, colorModifier};
+//        if (side == 1) {
+//            tint = GRAY;
+//        }
+
+        DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
     }
 }

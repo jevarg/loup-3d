@@ -25,4 +25,5 @@ private:
     Map mMap;
     Raycaster mRaycaster;
     Player mPlayer;
+    Texture2D mWallTex;
 };

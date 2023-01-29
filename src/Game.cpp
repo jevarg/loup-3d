@@ -6,7 +6,7 @@
 #include <raylib.h>
 #include <iostream>
 
-Game::Game() : mMap("../first.map"), mRaycaster(mMap, mPlayer) {}
+Game::Game() : mMap("first.map"), mRaycaster(mMap, mPlayer), mWallTex(LoadTexture("assets/wall.png")) {}
 
 void Game::start() {
     std::cout << "Starting new game!" << std::endl;
@@ -43,7 +43,7 @@ void Game::update() {
 }
 
 void Game::render() {
-    mRaycaster.render();
+    mRaycaster.render(mWallTex);
     mMap.render();
     mPlayer.render();
 }

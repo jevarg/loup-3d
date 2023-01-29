@@ -10,7 +10,7 @@
 class Raycaster {
 public:
     explicit Raycaster(const Map &map, const Player &player);
-    void render() const;
+    void render(const Texture2D &wallTex) const;
 
 private:
     const Map &mMap;
