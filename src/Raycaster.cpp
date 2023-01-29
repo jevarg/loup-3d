@@ -70,17 +70,22 @@ void Raycaster::render(const Texture2D &wallTex) const {
         }
 
         float perpWallDist;
-        float wallX;
-        if (!side) {
+        float hitX, hitY;
+//        float hitYOffset;
+        if (side == 0) {
             perpWallDist = (sideDistX - deltaX);
-            wallX = pos.y + perpWallDist * rayDir.y;
+            hitX = pos.y + perpWallDist * rayDir.y;
+            hitY = pos.x + perpWallDist * rayDir.x;
         } else {
             perpWallDist = (sideDistY - deltaY);
-            wallX = pos.x + perpWallDist * rayDir.x;
+            hitX = pos.x + perpWallDist * rayDir.x;
+            hitY = pos.y + perpWallDist * rayDir.y;
         }
 
-        wallX -= std::floor(wallX);
-        int texX = static_cast<int>(wallX * wallTex.width);
+        hitX -= std::floor(hitX);
+        hitY -= std::floor(hitY);
+
+        float texX = hitX * wallTex.width;
 
         if (side == 0 && rayDir.x > 0) {
             texX = wallTex.width - texX - 1;
@@ -97,13 +102,12 @@ void Raycaster::render(const Texture2D &wallTex) const {
         Rectangle rectSrc = {static_cast<float>(texX), 0, 1.0, static_cast<float>(wallTex.height)};
         Rectangle rectDst = {static_cast<float>(x), static_cast<float>(drawStart), 1, static_cast<float>(drawEnd - drawStart)};
 
-        uint8_t colorModifier = 255 - static_cast<uint8_t>(perpWallDist * 7) % 100;
-//        printf("%f, %d\n", perpWallDist, colorModifier);
-        Color tint = {colorModifier, colorModifier, colorModifier, colorModifier};
-//        if (side == 1) {
-//            tint = GRAY;
-//        }
+        uint8_t colorModifier = static_cast<int>(255 / perpWallDist);
+        if (colorModifier < 100) colorModifier = 100;
+        Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
         DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
+        DrawCircle(hitX * mMap.getCellWidth(), hitY * mMap.getCellHeight(), 2, RED);
+        DrawLineV(playerPos, {hitX * mMap.getCellWidth(), hitY * mMap.getCellHeight()}, GREEN);
     }
 }
