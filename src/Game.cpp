@@ -43,7 +43,7 @@ void Game::update() {
 }
 
 void Game::render() {
-    mMap.render();
     mRaycaster.render(mWallTex);
+    mMap.render();
     mPlayer.render();
 }

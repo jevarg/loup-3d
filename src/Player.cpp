@@ -15,6 +15,11 @@ void Player::render() const {
     Rectangle r = {mPosition.x, mPosition.y, 10, 10};
     float angle = std::atan2(mDirection.y, mDirection.x) * RAD2DEG;
     DrawRectanglePro(r, {r.width / 2, r.height / 2}, angle, RED);
+
+//    DrawLine(mPosition.x, mPosition.y,
+//             mPosition.x + mDirection.x * 10,
+//             mPosition.y + mDirection.y * 10,
+//             YELLOW);
 }
 
 void Player::update() {

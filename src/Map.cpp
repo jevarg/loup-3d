@@ -90,7 +90,8 @@ void Map::render() const {
                 color = BLUE;
                 break;
             default:
-                color = WHITE;
+                continue;
+                color = GRAY;
                 break;
         }
 

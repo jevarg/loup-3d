@@ -7,6 +7,11 @@
 #include "Raycaster.h"
 #include "Config.h"
 
+enum HitSide {
+    X = 0,
+    Y
+};
+
 Raycaster::Raycaster(const Map &map, const Player &player) : mMap(map), mPlayer(player) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
@@ -51,63 +56,65 @@ void Raycaster::render(const Texture2D &wallTex) const {
             sideDistY = (cellY + 1 - pos.y) * deltaY;
         }
 
-        bool hit = false;
-        int side = 0;
-        while (!hit) {
+        bool didHit = false;
+        HitSide hitSide;
+        while (!didHit) {
             if (sideDistX < sideDistY) {
                 sideDistX += deltaX;
                 cellX += stepX;
-                side = 0;
+                hitSide = HitSide::X;
             } else {
                 sideDistY += deltaY;
                 cellY += stepY;
-                side = 1;
+                hitSide = HitSide::Y;
             }
 
             if (mMap.get(cellX, cellY) == '1') {
-                hit = true;
+                didHit = true;
             }
         }
 
-        float perpWallDist;
-        float hitX, hitY;
-//        float hitYOffset;
-        if (side == 0) {
-            perpWallDist = (sideDistX - deltaX);
-            hitX = pos.y + perpWallDist * rayDir.y;
-            hitY = pos.x + perpWallDist * rayDir.x;
+        float perpendicularDist;
+        if (hitSide == HitSide::X) {
+            perpendicularDist = (sideDistX - deltaX);
         } else {
-            perpWallDist = (sideDistY - deltaY);
-            hitX = pos.x + perpWallDist * rayDir.x;
-            hitY = pos.y + perpWallDist * rayDir.y;
+            perpendicularDist = (sideDistY - deltaY);
         }
 
-        hitX -= std::floor(hitX);
-        hitY -= std::floor(hitY);
+        Vector2 hitPoint = {pos.x + perpendicularDist * rayDir.x,
+                            pos.y + perpendicularDist * rayDir.y};
 
-        float texX = hitX * wallTex.width;
+        float texX;
+        if (hitSide == HitSide::X) {
+            texX = (hitPoint.y - std::floor(hitPoint.y)) * wallTex.width;
+        } else {
+            texX = (hitPoint.x - std::floor(hitPoint.x)) * wallTex.width;
+        }
 
-        if (side == 0 && rayDir.x > 0) {
+        if (hitSide == HitSide::X && rayDir.x > 0) {
             texX = wallTex.width - texX - 1;
         }
-        if (side == 1 && rayDir.y < 0) {
+        if (hitSide == HitSide::Y && rayDir.y < 0) {
             texX = wallTex.width - texX - 1;
         }
 
-        int wallHeight = static_cast<int>(Config::windowSize.y / perpWallDist);
-        int drawStart = std::max(0, -wallHeight / 2 + static_cast<int>(Config::windowSize.y) / 2);
-        int drawEnd = std::min(static_cast<int>(Config::windowSize.y) - 1,
-                               wallHeight / 2 + static_cast<int>(Config::windowSize.y) / 2);
+        int wallHeight = static_cast<int>(Config::windowSize.y / perpendicularDist);
+        int drawStart = -wallHeight / 2 + static_cast<int>(Config::windowSize.y) / 2;
+        int drawEnd = wallHeight / 2 + static_cast<int>(Config::windowSize.y) / 2;
 
         Rectangle rectSrc = {static_cast<float>(texX), 0, 1.0, static_cast<float>(wallTex.height)};
-        Rectangle rectDst = {static_cast<float>(x), static_cast<float>(drawStart), 1, static_cast<float>(drawEnd - drawStart)};
+        Rectangle rectDst = {static_cast<float>(x), static_cast<float>(drawStart), 1,
+                             static_cast<float>(drawEnd - drawStart)};
 
-        uint8_t colorModifier = static_cast<int>(255 / perpWallDist);
-        if (colorModifier < 100) colorModifier = 100;
+
+        uint8_t colorModifier = 255;
+        if (Config::distantShadows && perpendicularDist > 1.0f) {
+            colorModifier = std::max(static_cast<uint8_t>(colorModifier / perpendicularDist), Config::maxShadow);
+        }
+
         Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
         DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
-        DrawCircle(hitX * mMap.getCellWidth(), hitY * mMap.getCellHeight(), 2, RED);
-        DrawLineV(playerPos, {hitX * mMap.getCellWidth(), hitY * mMap.getCellHeight()}, GREEN);
+        DrawLineV(playerPos, {hitPoint.x * mMap.getCellWidth(), hitPoint.y * mMap.getCellHeight()}, YELLOW);
     }
 }
