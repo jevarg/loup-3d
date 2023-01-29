@@ -61,7 +61,7 @@ bool Map::isValid() const {
 }
 
 char Map::get(uint8_t x, uint8_t y) const {
-    int pos = (y * mWidth) + x;
+    int pos = x + y;
     if (pos > mData.size()) {
         printf("Invalid position: (%d, %d)\n", x, y);
         return 0;
@@ -83,23 +83,6 @@ uint8_t Map::getHeight() const {
 }
 
 void Map::render() const {
-    for (int i = 0; i < mData.size(); i++) {
-        Color color;
-        switch (mData[i]) {
-            case '1':
-                color = BLUE;
-                break;
-            default:
-                continue;
-                color = GRAY;
-                break;
-        }
-
-        int x = (i % mWidth) * mCellWidth;
-        int y = (i / mWidth) * mCellHeight;
-
-        DrawRectangle(x, y,mCellWidth, mCellHeight, color);
-    }
 }
 
 int Map::getCellWidth() const {
@@ -108,4 +91,8 @@ int Map::getCellWidth() const {
 
 int Map::getCellHeight() const {
     return mCellHeight;
+}
+
+const std::vector<char> &Map::getData() const {
+    return mData;
 }

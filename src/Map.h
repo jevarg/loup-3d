@@ -22,6 +22,7 @@ public:
     int getCellHeight() const;
 
     char get(uint8_t x, uint8_t y) const;
+    const std::vector<char> &getData() const;
     void render() const;
 
 private:

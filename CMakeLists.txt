@@ -3,7 +3,7 @@ project(loup-3d)
 set(CMAKE_CXX_STANDARD 20)
 
 set(SOURCE_FILES
-        src/main.cpp src/Window.cpp src/Window.h src/Config.h src/Game.cpp src/Game.h src/Map.cpp src/Map.h src/Player.cpp src/Player.h src/Raycaster.cpp src/Raycaster.h)
+        src/main.cpp src/Window.cpp src/Window.h src/Config.h src/Game.cpp src/Game.h src/Map.cpp src/Map.h src/Player.cpp src/Player.h src/Raycaster.cpp src/Raycaster.h src/Minimap.cpp src/Minimap.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

@@ -16,11 +16,11 @@ Raycaster::Raycaster(const Map &map, const Player &player) : mMap(map), mPlayer(
 
 void Raycaster::render(const Texture2D &wallTex) const {
     Vector2 dir = mPlayer.getDirection();
-    Vector2 playerPos = mPlayer.getPosition();
-    Vector2 pos = {
-            playerPos.x / mMap.getCellWidth(),
-            playerPos.y / mMap.getCellHeight()
-    };
+    Vector2 pos = mPlayer.getPosition();
+//    Vector2 pos = {
+//            playerPos.x / mMap.getCellWidth(),
+//            playerPos.y / mMap.getCellHeight()
+//    };
 
     for (int x = 0; x < static_cast<int>(Config::windowSize.x); x++) {
         float camX = 2.0f * static_cast<float>(x) / Config::windowSize.x - 1;
@@ -115,6 +115,6 @@ void Raycaster::render(const Texture2D &wallTex) const {
         Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
         DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
-        DrawLineV(playerPos, {hitPoint.x * mMap.getCellWidth(), hitPoint.y * mMap.getCellHeight()}, YELLOW);
+//        DrawLineV(playerPos, {hitPoint.x * mMap.getCellWidth(), hitPoint.y * mMap.getCellHeight()}, YELLOW);
     }
 }
