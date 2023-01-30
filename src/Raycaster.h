@@ -6,13 +6,15 @@
 
 #include "Player.h"
 #include "Map.h"
+#include "Minimap.h"
 
 class Raycaster {
 public:
-    explicit Raycaster(const Map &map, const Player &player);
+    explicit Raycaster(const Map &map, const Player &player, const Minimap &minimap);
     void render(const Texture2D &wallTex) const;
 
 private:
     const Map &mMap;
     const Player &mPlayer;
+    const Minimap &mMinimap;
 };

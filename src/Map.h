@@ -18,8 +18,8 @@ public:
     uint8_t getWidth() const;
     uint8_t getHeight() const;
 
-    int getCellWidth() const;
-    int getCellHeight() const;
+//    int getCellWidth() const;
+//    int getCellHeight() const;
 
     char get(uint8_t x, uint8_t y) const;
     const std::vector<char> &getData() const;
@@ -34,6 +34,6 @@ private:
 
     Vector2 mSpawnPoint = { };
 
-    int mCellWidth = 0;
-    int mCellHeight = 0;
+//    int mCellWidth = 0;
+//    int mCellHeight = 0;
 };

@@ -14,23 +14,23 @@ void Player::render() const {}
 
 void Player::update() {
     if (IsKeyDown(KEY_W)) {
-        mPosition.x += mDirection.x;
-        mPosition.y += mDirection.y;
+        mPosition.x += mDirection.x * Config::movementSpeed;
+        mPosition.y += mDirection.y * Config::movementSpeed;
     }
 
     if (IsKeyDown(KEY_S)) {
-        mPosition.x -= mDirection.x;
-        mPosition.y -= mDirection.y;
+        mPosition.x -= mDirection.x * Config::movementSpeed;
+        mPosition.y -= mDirection.y * Config::movementSpeed;
     }
 
     if (IsKeyDown(KEY_A)) {
-        mPosition.x += mDirection.y;
-        mPosition.y -= mDirection.x;
+        mPosition.x += mDirection.y * Config::movementSpeed;
+        mPosition.y -= mDirection.x * Config::movementSpeed;
     }
 
     if (IsKeyDown(KEY_D)) {
-        mPosition.x -= mDirection.y;
-        mPosition.y += mDirection.x;
+        mPosition.x -= mDirection.y * Config::movementSpeed;
+        mPosition.y += mDirection.x * Config::movementSpeed;
     }
 
     float angle;
@@ -59,12 +59,4 @@ const Vector2 &Player::getPosition() const {
 
 const Vector2 &Player::getDirection() const {
     return mDirection;
-}
-
-const Vector2 &Player::getPlane() const {
-    return mPlane;
-}
-
-const Vector2 &Player::getDeltaPosition() const {
-    return mDeltaPosition;
 }

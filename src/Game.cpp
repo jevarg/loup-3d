@@ -10,7 +10,7 @@
 
 Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
-               mRaycaster(mMap, mPlayer),
+               mRaycaster(mMap, mPlayer, mMinimap),
                mWallTex(LoadTexture("assets/wall.png")) {}
 
 void Game::start() {
@@ -28,7 +28,7 @@ void Game::loop() {
         ClearBackground(BLACK);
         BeginDrawing();
         render();
-        DrawFPS(Config::windowSize.x - 100, 20); // DEBUG
+        DrawFPS(Config::windowSize.x - 90, 10); // DEBUG
         EndDrawing();
     }
 }
@@ -46,6 +46,6 @@ void Game::update() {
 }
 
 void Game::render() {
-//    mRaycaster.render(mWallTex);
+    mRaycaster.render(mWallTex);
     mMinimap.render();
 }

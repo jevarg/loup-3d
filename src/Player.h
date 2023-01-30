@@ -14,12 +14,8 @@ public:
 
     const Vector2 &getPosition() const;
     const Vector2 &getDirection() const;
-    const Vector2 &getPlane() const;
-    const Vector2 &getDeltaPosition() const;
 
 private:
     Vector2 mPosition{};
-    Vector2 mDirection{1, 0};
-    Vector2 mPlane{};
-    Vector2 mDeltaPosition{};
+    Vector2 mDirection{-1, 0};
 };

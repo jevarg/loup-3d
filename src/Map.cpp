@@ -52,8 +52,8 @@ Map::Map(const std::string &filePath) {
 
     file.close();
 
-    mCellWidth = mWidth * Config::mapScale;
-    mCellHeight = mHeight * Config::mapScale;
+//    mCellWidth = mWidth * Config::mapScale;
+//    mCellHeight = mHeight * Config::mapScale;
 }
 
 bool Map::isValid() const {
@@ -61,7 +61,7 @@ bool Map::isValid() const {
 }
 
 char Map::get(uint8_t x, uint8_t y) const {
-    int pos = x + y;
+    int pos = (y * mWidth) + x;
     if (pos > mData.size()) {
         printf("Invalid position: (%d, %d)\n", x, y);
         return 0;
@@ -85,13 +85,13 @@ uint8_t Map::getHeight() const {
 void Map::render() const {
 }
 
-int Map::getCellWidth() const {
-    return mCellWidth;
-}
-
-int Map::getCellHeight() const {
-    return mCellHeight;
-}
+//int Map::getCellWidth() const {
+//    return mCellWidth;
+//}
+//
+//int Map::getCellHeight() const {
+//    return mCellHeight;
+//}
 
 const std::vector<char> &Map::getData() const {
     return mData;

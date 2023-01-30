@@ -12,12 +12,13 @@ enum HitSide {
     Y
 };
 
-Raycaster::Raycaster(const Map &map, const Player &player) : mMap(map), mPlayer(player) {}
+Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) : mMap(map), mPlayer(player),
+                                                                                     mMinimap(minimap) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
     Vector2 dir = mPlayer.getDirection();
     Vector2 pos = mPlayer.getPosition();
-//    Vector2 pos = {
+//    vec2 pos = {
 //            playerPos.x / mMap.getCellWidth(),
 //            playerPos.y / mMap.getCellHeight()
 //    };
@@ -29,8 +30,8 @@ void Raycaster::render(const Texture2D &wallTex) const {
                 .y = dir.y + dir.x * camX
         };
 
-        uint8_t cellX = static_cast<int>(pos.x);
-        uint8_t cellY = static_cast<int>(pos.y);
+        uint8_t cellX = static_cast<uint8_t>(pos.x);
+        uint8_t cellY = static_cast<uint8_t>(pos.y);
 
         float deltaX = std::abs(1 / rayDir.x);
         float deltaY = std::abs(1 / rayDir.y);
@@ -115,6 +116,6 @@ void Raycaster::render(const Texture2D &wallTex) const {
         Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
         DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
-//        DrawLineV(playerPos, {hitPoint.x * mMap.getCellWidth(), hitPoint.y * mMap.getCellHeight()}, YELLOW);
+        mMinimap.drawPlayerFOVLine(hitPoint);
     }
 }
