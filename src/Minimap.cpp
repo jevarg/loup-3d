@@ -21,7 +21,6 @@ void Minimap::render() const {
                 color = BLUE;
                 break;
             default:
-//                continue;
                 color = GRAY;
                 break;
         }

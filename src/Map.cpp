@@ -51,9 +51,6 @@ Map::Map(const std::string &filePath) {
     mValid = true;
 
     file.close();
-
-//    mCellWidth = mWidth * Config::mapScale;
-//    mCellHeight = mHeight * Config::mapScale;
 }
 
 bool Map::isValid() const {
@@ -82,16 +79,7 @@ uint8_t Map::getHeight() const {
     return mHeight;
 }
 
-void Map::render() const {
-}
-
-//int Map::getCellWidth() const {
-//    return mCellWidth;
-//}
-//
-//int Map::getCellHeight() const {
-//    return mCellHeight;
-//}
+void Map::render() const {}
 
 const std::vector<char> &Map::getData() const {
     return mData;
