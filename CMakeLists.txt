@@ -16,7 +16,7 @@ set(SOURCE_FILES
         src/Raycaster.cpp
         src/Raycaster.h
         src/Minimap.cpp
-        src/Minimap.h)
+        src/Minimap.h src/EntityType.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

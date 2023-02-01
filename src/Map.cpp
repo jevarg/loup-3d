@@ -33,7 +33,14 @@ Map::Map(const std::string &filePath) {
 
         uint8_t x = 0;
         for (char c : line) {
-            mData.push_back(c);
+            if (c < '0' || c > '9') {
+                mValid = false;
+                file.close();
+                std::cerr << "Invalid map: invalid char '" << c << "' at (" << +x << "," << +y << ")" << std::endl;
+                return;
+            }
+
+            mData.push_back(static_cast<EntityType>(c - '0'));
             if (c == '2' && !spawnPointFound) {
                 mSpawnPoint.x = x;
                 mSpawnPoint.y = y;
@@ -57,11 +64,11 @@ bool Map::isValid() const {
     return mValid;
 }
 
-char Map::get(uint8_t x, uint8_t y) const {
+EntityType Map::get(uint8_t x, uint8_t y) const {
     int pos = (y * mWidth) + x;
     if (pos > mData.size()) {
         printf("Invalid position: (%d, %d)\n", x, y);
-        return 0;
+        return EntityType::Invalid;
     }
 
     return mData[pos];
@@ -81,6 +88,6 @@ uint8_t Map::getHeight() const {
 
 void Map::render() const {}
 
-const std::vector<char> &Map::getData() const {
+const std::vector<EntityType> &Map::getData() const {
     return mData;
 }

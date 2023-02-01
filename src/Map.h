@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <raylib.h>
+#include "EntityType.h"
 
 class Map {
 public:
@@ -18,22 +19,16 @@ public:
     uint8_t getWidth() const;
     uint8_t getHeight() const;
 
-//    int getCellWidth() const;
-//    int getCellHeight() const;
-
-    char get(uint8_t x, uint8_t y) const;
-    const std::vector<char> &getData() const;
+    EntityType get(uint8_t x, uint8_t y) const;
+    const std::vector<EntityType> &getData() const;
     void render() const;
 
 private:
-    std::vector<char> mData;
+    std::vector<EntityType> mData;
     bool mValid = false;
 
     uint8_t mWidth = 0;
     uint8_t mHeight = 0;
 
     Vector2 mSpawnPoint = { };
-
-//    int mCellWidth = 0;
-//    int mCellHeight = 0;
 };

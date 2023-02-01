@@ -12,15 +12,16 @@ Minimap::Minimap(const Player &player, const Map &map) : mPlayer(player), mMap(m
                                                                   map.getHeight() * Config::mapScale) {}
 
 void Minimap::render() const {
-    const std::vector<char> mapData = mMap.getData();
+    const std::vector<EntityType> mapData = mMap.getData();
 
     for (int i = 0; i < mapData.size(); i++) {
         Color color;
         switch (mapData[i]) {
-            case '1':
+            case EntityType::Wall:
                 color = BLUE;
                 break;
             default:
+                continue;
                 color = GRAY;
                 break;
         }

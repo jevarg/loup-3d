@@ -70,7 +70,7 @@ void Raycaster::render(const Texture2D &wallTex) const {
                 hitSide = HitSide::Y;
             }
 
-            if (mMap.get(cellX, cellY) == '1') {
+            if (mMap.get(cellX, cellY) == EntityType::Wall) {
                 didHit = true;
             }
         }

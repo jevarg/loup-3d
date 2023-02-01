@@ -11,11 +11,16 @@
 Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
                mRaycaster(mMap, mPlayer, mMinimap),
-               mWallTex(LoadTexture("assets/wall.png")) {}
+               mWallTex(LoadTexture("assets/wall.png")) {
+}
 
 void Game::start() {
-    std::cout << "Starting new game!" << std::endl;
+    if (!mMap.isValid()) {
+        std::cerr << "Could not start game! Map is not valid" << std::endl;
+        return;
+    }
 
+    std::cout << "Starting new game!" << std::endl;
     mPlayer.setPosition(mMap.getSpawnPoint());
     loop();
 }
