@@ -15,6 +15,6 @@ public:
     constexpr static const int mapScale = 1.0f;
     constexpr static const float rotationSpeed = 1.5f;
     constexpr static const bool distantShadows = true;
-    constexpr static const uint8_t maxShadow = 50;
+    constexpr static const uint8_t maxShadow = 255;
     constexpr static const float movementSpeed = 0.03f;
 };

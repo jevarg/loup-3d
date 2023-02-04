@@ -4,6 +4,7 @@
 
 #include "Minimap.h"
 #include "Config.h"
+#include "Raycaster.h"
 #include <cmath>
 #include <raylib.h>
 
@@ -41,9 +42,22 @@ void Minimap::render() const {
     DrawLine(playerPos.x * cellSize.width, playerPos.y * cellSize.height, playerPos.x * cellSize.width + playerDir.x * 100, playerPos.y * cellSize.height + playerDir.y * 100, GREEN);
 }
 
-void Minimap::drawPlayerFOVLine(const Vector2 &hitPoint) const {
+void Minimap::drawPlayerFOV(const std::vector<HitPoint> &hitPoints) const {
     const Vector2 &playerPos = mPlayer.getPosition();
 
-    DrawLine(playerPos.x * cellSize.width, playerPos.y * cellSize.height,
-             hitPoint.x * cellSize.width, hitPoint.y * cellSize.height, YELLOW);
+    int prev = 0;
+    for (int i = 0; i < hitPoints.size(); ++i) {
+        if (i == 0) {
+            DrawLine(playerPos.x * cellSize.width, playerPos.y * cellSize.height,
+                     hitPoints[i].point.x * cellSize.width, hitPoints[i].point.y * cellSize.height, YELLOW);
+        } else if (i == hitPoints.size() - 1) {
+            DrawLine(hitPoints[i].point.x * cellSize.width, hitPoints[i].point.y * cellSize.height,
+                     playerPos.x * cellSize.width, playerPos.y * cellSize.height, YELLOW);
+        } else if (hitPoints[prev].dist != hitPoints[i].dist) {
+            DrawLine(hitPoints[prev].point.x * cellSize.width, hitPoints[prev].point.y * cellSize.height,
+                     hitPoints[i].point.x * cellSize.width, hitPoints[i].point.y * cellSize.height, YELLOW);
+        }
+
+        prev = i;
+    }
 }

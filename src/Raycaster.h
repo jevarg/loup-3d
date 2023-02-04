@@ -8,6 +8,11 @@
 #include "Map.h"
 #include "Minimap.h"
 
+struct HitPoint {
+    Vector2 point;
+    float dist;
+};
+
 class Raycaster {
 public:
     explicit Raycaster(const Map &map, const Player &player, const Minimap &minimap);

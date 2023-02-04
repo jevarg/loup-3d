@@ -18,6 +18,7 @@ Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minima
 void Raycaster::render(const Texture2D &wallTex) const {
     Vector2 dir = mPlayer.getDirection();
     Vector2 pos = mPlayer.getPosition();
+    std::vector<HitPoint> hitPoints;
 //    vec2 pos = {
 //            playerPos.x / mMap.getCellWidth(),
 //            playerPos.y / mMap.getCellHeight()
@@ -85,6 +86,8 @@ void Raycaster::render(const Texture2D &wallTex) const {
         Vector2 hitPoint = {pos.x + perpendicularDist * rayDir.x,
                             pos.y + perpendicularDist * rayDir.y};
 
+        hitPoints.push_back(HitPoint{hitPoint, perpendicularDist});
+
         float texX;
         if (hitSide == HitSide::X) {
             texX = (hitPoint.y - std::floor(hitPoint.y)) * wallTex.width;
@@ -116,6 +119,7 @@ void Raycaster::render(const Texture2D &wallTex) const {
         Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
         DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
-        mMinimap.drawPlayerFOVLine(hitPoint);
     }
+
+    mMinimap.drawPlayerFOV(hitPoints);
 }

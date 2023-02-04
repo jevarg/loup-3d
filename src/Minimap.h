@@ -8,11 +8,13 @@
 #include "Player.h"
 #include "Map.h"
 
+struct HitPoint;
+
 class Minimap {
 public:
     explicit Minimap(const Player &player, const Map &map);
     void render() const;
-    void drawPlayerFOVLine(const Vector2 &hitPoint) const;
+    void drawPlayerFOV(const std::vector<HitPoint> &hitPoints) const;
 
 private:
     const Player &mPlayer;
