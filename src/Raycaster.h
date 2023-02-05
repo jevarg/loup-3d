@@ -19,6 +19,9 @@ public:
     void render(const Texture2D &wallTex) const;
 
 private:
+    void mRenderWalls(const Texture2D &wallTex) const;
+    void mRenderFloor() const;
+
     const Map &mMap;
     const Player &mPlayer;
     const Minimap &mMinimap;

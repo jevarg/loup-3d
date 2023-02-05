@@ -16,23 +16,34 @@ Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minima
                                                                                      mMinimap(minimap) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
-    const Vector2 &dir = mPlayer.getDirection();
-    const Vector3 &pos = mPlayer.getPosition();
+    mRenderFloor();
+    mRenderWalls(wallTex); // TODO: Return wall hit points?
+}
+
+void Raycaster::mRenderFloor() const {
+    const Vector3 &playerPos = mPlayer.getPosition();
+    const Vector2 &playerDir = mPlayer.getDirection();
+
+    for (int y = 0; y < static_cast<int>(Config::windowSize.y); ++y) {
+        int pixelDist = y - static_cast<int>(Config::windowSize.y / 2);
+        float rowDist = playerPos.z / pixelDist;
+    }
+}
+
+void Raycaster::mRenderWalls(const Texture2D &wallTex) const {
+    const Vector2 &playerDir = mPlayer.getDirection();
+    const Vector3 &playerPos = mPlayer.getPosition();
     std::vector<HitPoint> hitPoints;
-//    vec2 pos = {
-//            playerPos.x / mMap.getCellWidth(),
-//            playerPos.y / mMap.getCellHeight()
-//    };
 
     for (int x = 0; x < static_cast<int>(Config::windowSize.x); x++) {
         float camX = 2.0f * static_cast<float>(x) / Config::windowSize.x - 1;
         Vector2 rayDir = {
-                .x = dir.x - dir.y * camX,
-                .y = dir.y + dir.x * camX
+                .x = playerDir.x - playerDir.y * camX,
+                .y = playerDir.y + playerDir.x * camX
         };
 
-        uint8_t cellX = static_cast<uint8_t>(pos.x);
-        uint8_t cellY = static_cast<uint8_t>(pos.y);
+        uint8_t cellX = static_cast<uint8_t>(playerPos.x);
+        uint8_t cellY = static_cast<uint8_t>(playerPos.y);
 
         float deltaX = std::abs(1 / rayDir.x);
         float deltaY = std::abs(1 / rayDir.y);
@@ -44,18 +55,18 @@ void Raycaster::render(const Texture2D &wallTex) const {
         int stepY;
         if (rayDir.x < 0) { // WEST
             stepX = -1;
-            sideDistX = (pos.x - cellX) * deltaX;
+            sideDistX = (playerPos.x - cellX) * deltaX;
         } else { // EAST
             stepX = 1;
-            sideDistX = (cellX + 1 - pos.x) * deltaX;
+            sideDistX = (cellX + 1 - playerPos.x) * deltaX;
         }
 
         if (rayDir.y < 0) { // NORTH
             stepY = -1;
-            sideDistY = (pos.y - cellY) * deltaY;
+            sideDistY = (playerPos.y - cellY) * deltaY;
         } else { // SOUTH
             stepY = 1;
-            sideDistY = (cellY + 1 - pos.y) * deltaY;
+            sideDistY = (cellY + 1 - playerPos.y) * deltaY;
         }
 
         bool didHit = false;
@@ -83,8 +94,8 @@ void Raycaster::render(const Texture2D &wallTex) const {
             perpendicularDist = (sideDistY - deltaY);
         }
 
-        Vector2 hitPoint = {pos.x + perpendicularDist * rayDir.x,
-                            pos.y + perpendicularDist * rayDir.y};
+        Vector2 hitPoint = {playerPos.x + perpendicularDist * rayDir.x,
+                            playerPos.y + perpendicularDist * rayDir.y};
 
         hitPoints.push_back(HitPoint{hitPoint, perpendicularDist});
 
