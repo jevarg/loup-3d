@@ -6,7 +6,7 @@
 #include "Config.h"
 #include "Player.h"
 
-void Player::setPosition(Vector2 pos) {
+void Player::setPosition(Vector3 pos) {
     mPosition = pos;
 }
 
@@ -53,7 +53,7 @@ void Player::update() {
     }
 }
 
-const Vector2 &Player::getPosition() const {
+const Vector3 &Player::getPosition() const {
     return mPosition;
 }
 

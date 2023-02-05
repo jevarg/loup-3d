@@ -14,7 +14,7 @@ public:
     explicit Map(const std::string &filePath);
 
     bool isValid() const;
-    Vector2 getSpawnPoint() const;
+    const Vector3 &getSpawnPoint() const;
 
     uint8_t getWidth() const;
     uint8_t getHeight() const;
@@ -30,5 +30,5 @@ private:
     uint8_t mWidth = 0;
     uint8_t mHeight = 0;
 
-    Vector2 mSpawnPoint = { };
+    Vector3 mSpawnPoint = { };
 };

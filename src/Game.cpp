@@ -39,13 +39,13 @@ void Game::loop() {
 }
 
 void Game::update() {
-    Vector2 prevPos = mPlayer.getPosition();
+    Vector3 prevPos = mPlayer.getPosition();
     mPlayer.update();
 
-    Vector2 pos = mPlayer.getPosition();
+    Vector3 pos = mPlayer.getPosition();
     Vector2 playerCellPos = {std::floor(pos.x), std::floor(pos.y)};
 
-    if (mMap.get(static_cast<uint8_t>(playerCellPos.x), static_cast<uint8_t>(playerCellPos.y)) == '1') {
+    if (mMap.get(static_cast<uint8_t>(playerCellPos.x), static_cast<uint8_t>(playerCellPos.y)) == EntityType::Wall) {
         mPlayer.setPosition(prevPos);
     }
 }

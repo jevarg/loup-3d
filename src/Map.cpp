@@ -44,6 +44,7 @@ Map::Map(const std::string &filePath) {
             if (c == '2' && !spawnPointFound) {
                 mSpawnPoint.x = x;
                 mSpawnPoint.y = y;
+                mSpawnPoint.z = Config::windowSize.y * 0.5;
                 spawnPointFound = true;
             }
 
@@ -74,7 +75,7 @@ EntityType Map::get(uint8_t x, uint8_t y) const {
     return mData[pos];
 }
 
-Vector2 Map::getSpawnPoint() const {
+const Vector3 &Map::getSpawnPoint() const {
     return mSpawnPoint;
 }
 

@@ -16,8 +16,8 @@ Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minima
                                                                                      mMinimap(minimap) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
-    Vector2 dir = mPlayer.getDirection();
-    Vector2 pos = mPlayer.getPosition();
+    const Vector2 &dir = mPlayer.getDirection();
+    const Vector3 &pos = mPlayer.getPosition();
     std::vector<HitPoint> hitPoints;
 //    vec2 pos = {
 //            playerPos.x / mMap.getCellWidth(),

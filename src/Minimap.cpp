@@ -33,8 +33,8 @@ void Minimap::render() const {
         DrawRectangle(x, y, cellSize.width, cellSize.height, color);
     }
 
-    Vector2 playerPos = mPlayer.getPosition();
-    Vector2 playerDir = mPlayer.getDirection();
+    const Vector3 &playerPos = mPlayer.getPosition();
+    const Vector2 &playerDir = mPlayer.getDirection();
     float angle = std::atan2(playerDir.y, playerDir.x) * RAD2DEG;
     Rectangle r = {playerPos.x * cellSize.width, playerPos.y * cellSize.height, 10, 10};
 
@@ -43,7 +43,7 @@ void Minimap::render() const {
 }
 
 void Minimap::drawPlayerFOV(const std::vector<HitPoint> &hitPoints) const {
-    const Vector2 &playerPos = mPlayer.getPosition();
+    const Vector3 &playerPos = mPlayer.getPosition();
 
     int prev = 0;
     for (int i = 0; i < hitPoints.size(); ++i) {
