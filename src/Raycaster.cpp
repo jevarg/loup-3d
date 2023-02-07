@@ -3,6 +3,7 @@
 //
 
 #include <raylib.h>
+#include <raymath.h>
 #include <cmath>
 #include "Raycaster.h"
 #include "Config.h"
@@ -13,7 +14,8 @@ enum HitSide {
 };
 
 Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) : mMap(map), mPlayer(player),
-                                                                                     mMinimap(minimap) {}
+                                                                                     mMinimap(minimap),
+                                                                                     mFloorTex(LoadTexture("assets/floor.png")) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
     mRenderFloor();
@@ -23,10 +25,54 @@ void Raycaster::render(const Texture2D &wallTex) const {
 void Raycaster::mRenderFloor() const {
     const Vector3 &playerPos = mPlayer.getPosition();
     const Vector2 &playerDir = mPlayer.getDirection();
+    const Vector2 &leftRayDir = {
+            playerDir.x + playerDir.y,
+            playerDir.y - playerDir.x
+    };
 
-    for (int y = 0; y < static_cast<int>(Config::windowSize.y); ++y) {
+    const Vector2 &rightRayDir = {
+            playerDir.x - playerDir.y,
+            playerDir.y + playerDir.x
+    };
+
+    for (int y = static_cast<int>(Config::windowSize.y / 2) + 1; y < static_cast<int>(Config::windowSize.y); y++) {
         int pixelDist = y - static_cast<int>(Config::windowSize.y / 2);
         float rowDist = playerPos.z / pixelDist;
+
+        const Vector2 &floorStep = {
+                rowDist * (rightRayDir.x - leftRayDir.x) / Config::windowSize.x,
+                rowDist * (rightRayDir.y - leftRayDir.y) / Config::windowSize.x,
+        };
+
+        Vector2 floorPoint = {
+                playerPos.x + rowDist * leftRayDir.x,
+                playerPos.y + rowDist * leftRayDir.y,
+        };
+
+        for (int x = 0; x < static_cast<int>(Config::windowSize.x); ++x) {
+            int cellX = static_cast<int>(floorPoint.x);
+            int cellY = static_cast<int>(floorPoint.y);
+
+            floorPoint.x += floorStep.x;
+            floorPoint.y += floorStep.y;
+
+            const Rectangle &src = {
+                    mFloorTex.width * (floorPoint.x - cellX),
+                    mFloorTex.height * (floorPoint.y - cellY),
+                    1,
+                    1
+            };
+
+            const Rectangle &dest = {
+                    static_cast<float>(x),
+                    static_cast<float>(y),
+                    1,
+                    1
+            };
+
+            // TODO: Too many fucking draw calls
+            DrawTexturePro(mFloorTex, src, dest, {0, 0}, 0, WHITE);
+        }
     }
 }
 

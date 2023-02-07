@@ -15,10 +15,11 @@ public:
     explicit Minimap(const Player &player, const Map &map);
     void render() const;
     void drawPlayerFOV(const std::vector<HitPoint> &hitPoints) const;
+    const jevarg::size<int> &getCellSize() const;
 
 private:
     const Player &mPlayer;
     const Map &mMap;
 
-    jevarg::size<int> cellSize;
+    jevarg::size<int> mCellSize;
 };
