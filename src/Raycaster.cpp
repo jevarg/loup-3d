@@ -16,7 +16,8 @@ enum HitSide {
 Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) :
         mMap(map), mPlayer(player),
         mMinimap(minimap),
-        mFloorTex(LoadTexture("assets/floor.png")) {}
+        mFloorTex(LoadTexture("assets/floor.png")),
+        mFloorImg(LoadImage("assets/floor.png")) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
     mRenderFloor();
@@ -51,29 +52,33 @@ void Raycaster::mRenderFloor() const {
         };
 
         for (int x = 0; x < static_cast<int>(Config::windowSize.x); ++x) {
-//            int cellX = static_cast<int>(floorPoint.x);
-//            int cellY = static_cast<int>(floorPoint.y);
-//
-//            floorPoint.x += floorStep.x;
-//            floorPoint.y += floorStep.y;
-//
-//            const Rectangle &src = {
-//                    mFloorTex.width * (floorPoint.x - cellX),
-//                    mFloorTex.height * (floorPoint.y - cellY),
-//                    1,
-//                    1
-//            };
-//
-//            const Rectangle &dest = {
-//                    static_cast<float>(x),
-//                    static_cast<float>(y),
-//                    1,
-//                    1
-//            };
-//
-//            // TODO: Too many fucking draw calls
+            int cellX = static_cast<int>(floorPoint.x);
+            int cellY = static_cast<int>(floorPoint.y);
+
+            floorPoint.x += floorStep.x;
+            floorPoint.y += floorStep.y;
+
+            int tx = mFloorTex.width * (floorPoint.x - cellX);
+            int ty = mFloorTex.height * (floorPoint.y - cellY);
+            const Rectangle &src = {
+                    static_cast<float>(tx),
+                    static_cast<float>(ty),
+                    1,
+                    1
+            };
+
+            const Rectangle &dest = {
+                    static_cast<float>(x),
+                    static_cast<float>(y),
+                    1,
+                    1
+            };
+
+            int offset = (((ty * mFloorImg.width) + tx) * 4) % (mFloorImg.width * mFloorImg.height);
+            Color *pixel = reinterpret_cast<Color *>(static_cast<uint8_t *>(mFloorImg.data) + offset);
+            // TODO: Too many fucking draw calls
 //            DrawTextureRec(mFloorTex, src, {static_cast<float>(x), static_cast<float>(y)}, WHITE);
-            DrawPixel(x, y, GRAY);
+            DrawPixel(x, y, *pixel);
         }
     }
 }
