@@ -76,8 +76,6 @@ void Raycaster::mRenderFloor() const {
 
             int offset = (((ty * mFloorImg.width) + tx) * 4) % (mFloorImg.width * mFloorImg.height);
             Color *pixel = reinterpret_cast<Color *>(static_cast<uint8_t *>(mFloorImg.data) + offset);
-            // TODO: Too many fucking draw calls
-//            DrawTextureRec(mFloorTex, src, {static_cast<float>(x), static_cast<float>(y)}, WHITE);
             DrawPixel(x, y, *pixel);
         }
     }
