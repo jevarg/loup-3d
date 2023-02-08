@@ -13,9 +13,10 @@ enum HitSide {
     Y
 };
 
-Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) : mMap(map), mPlayer(player),
-                                                                                     mMinimap(minimap),
-                                                                                     mFloorTex(LoadTexture("assets/floor.png")) {}
+Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) :
+        mMap(map), mPlayer(player),
+        mMinimap(minimap),
+        mFloorTex(LoadTexture("assets/floor.png")) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
     mRenderFloor();
@@ -50,28 +51,29 @@ void Raycaster::mRenderFloor() const {
         };
 
         for (int x = 0; x < static_cast<int>(Config::windowSize.x); ++x) {
-            int cellX = static_cast<int>(floorPoint.x);
-            int cellY = static_cast<int>(floorPoint.y);
-
-            floorPoint.x += floorStep.x;
-            floorPoint.y += floorStep.y;
-
-            const Rectangle &src = {
-                    mFloorTex.width * (floorPoint.x - cellX),
-                    mFloorTex.height * (floorPoint.y - cellY),
-                    1,
-                    1
-            };
-
-            const Rectangle &dest = {
-                    static_cast<float>(x),
-                    static_cast<float>(y),
-                    1,
-                    1
-            };
-
-            // TODO: Too many fucking draw calls
-            DrawTexturePro(mFloorTex, src, dest, {0, 0}, 0, WHITE);
+//            int cellX = static_cast<int>(floorPoint.x);
+//            int cellY = static_cast<int>(floorPoint.y);
+//
+//            floorPoint.x += floorStep.x;
+//            floorPoint.y += floorStep.y;
+//
+//            const Rectangle &src = {
+//                    mFloorTex.width * (floorPoint.x - cellX),
+//                    mFloorTex.height * (floorPoint.y - cellY),
+//                    1,
+//                    1
+//            };
+//
+//            const Rectangle &dest = {
+//                    static_cast<float>(x),
+//                    static_cast<float>(y),
+//                    1,
+//                    1
+//            };
+//
+//            // TODO: Too many fucking draw calls
+//            DrawTextureRec(mFloorTex, src, {static_cast<float>(x), static_cast<float>(y)}, WHITE);
+            DrawPixel(x, y, GRAY);
         }
     }
 }
@@ -175,8 +177,19 @@ void Raycaster::mRenderWalls(const Texture2D &wallTex) const {
 
         Color tint = {colorModifier, colorModifier, colorModifier, 255};
 
-        DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
-    }
+        if (hitSide == HitSide::Y) {
+            tint = {150, 150, 150, 255};
+        }
 
+        DrawTexturePro(wallTex, rectSrc, rectDst, {0, 0}, 0, tint);
+
+//        if (drawEnd < Config::windowSize.y) {
+//            DrawLine(x, drawEnd, x, Config::windowSize.y, GREEN);
+//        }
+//
+//        if (drawStart > 0) {
+//            DrawLine(x, 0, x, drawStart, BLUE);
+//        }
+    }
     mMinimap.drawPlayerFOV(hitPoints);
 }
