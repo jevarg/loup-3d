@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.11)
 project(loup-3d)
 set(CMAKE_CXX_STANDARD 20)
 
+include(${CMAKE_CURRENT_LIST_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 set(SOURCE_FILES
         src/main.cpp
         src/Window.cpp
@@ -32,4 +35,4 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif ()
 
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} raylib ${CONAN_LIBS})
