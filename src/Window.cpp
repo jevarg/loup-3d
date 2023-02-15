@@ -6,8 +6,6 @@
 #include "Config.h"
 #include <raylib.h>
 
-void capture_fucking_pointer(void *);
-
 Window::Window() {
     InitWindow(Config::windowSize.x, Config::windowSize.y, "Loup 3D");
     DisableCursor();

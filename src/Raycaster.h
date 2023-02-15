@@ -25,6 +25,5 @@ private:
     const Map &mMap;
     const Player &mPlayer;
     const Minimap &mMinimap;
-    Texture2D mFloorTex;
     Image mFloorImg;
 };

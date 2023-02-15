@@ -4,7 +4,6 @@
 
 #include <raylib.h>
 #include <raymath.h>
-#include <cmath>
 #include "Raycaster.h"
 #include "Config.h"
 
@@ -16,7 +15,6 @@ enum HitSide {
 Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) :
         mMap(map), mPlayer(player),
         mMinimap(minimap),
-        mFloorTex(LoadTexture("assets/floor.png")),
         mFloorImg(LoadImage("assets/floor.png")) {}
 
 void Raycaster::render(const Texture2D &wallTex) const {
@@ -58,8 +56,8 @@ void Raycaster::mRenderFloor() const {
             floorPoint.x += floorStep.x;
             floorPoint.y += floorStep.y;
 
-            int tx = mFloorTex.width * (floorPoint.x - cellX);
-            int ty = mFloorTex.height * (floorPoint.y - cellY);
+            int tx = mFloorImg.width * (floorPoint.x - cellX);
+            int ty = mFloorImg.height * (floorPoint.y - cellY);
             const Rectangle &src = {
                     static_cast<float>(tx),
                     static_cast<float>(ty),
