@@ -7,24 +7,26 @@
 #include "Player.h"
 #include "Map.h"
 #include "Minimap.h"
+#include <jevarg.h>
+#include <SDL2/SDL.h>
 
 struct HitPoint {
-    Vector2 point;
+    jevarg::vec2<float> point;
     float dist;
 };
 
 class Raycaster {
 public:
     explicit Raycaster(const Map &map, const Player &player, const Minimap &minimap);
-    void render(const Texture2D &wallTex) const;
+    void render(SDL_Renderer *renderer) const;
 
 private:
-    void mRenderWalls(const Texture2D &wallTex) const;
-    void mRenderFloor() const;
+    void mRenderWalls(SDL_Renderer *renderer) const;
+    void mRenderFloor(SDL_Renderer *renderer) const;
 
     const Map &mMap;
     const Player &mPlayer;
     const Minimap &mMinimap;
-    Texture2D mFloorTex;
-    Image mFloorImg;
+//    Texture2D mFloorTex;
+//    Image mFloorImg;
 };

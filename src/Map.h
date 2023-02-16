@@ -6,7 +6,7 @@
 
 #include <string>
 #include <vector>
-#include <raylib.h>
+#include <jevarg.h>
 #include "EntityType.h"
 
 class Map {
@@ -14,10 +14,8 @@ public:
     explicit Map(const std::string &filePath);
 
     bool isValid() const;
-    const Vector3 &getSpawnPoint() const;
-
-    uint8_t getWidth() const;
-    uint8_t getHeight() const;
+    const jevarg::vec3<int> &getSpawnPoint() const;
+    const jevarg::size<uint8_t> &getSize() const;
 
     EntityType get(uint8_t x, uint8_t y) const;
     const std::vector<EntityType> &getData() const;
@@ -27,8 +25,6 @@ private:
     std::vector<EntityType> mData;
     bool mValid = false;
 
-    uint8_t mWidth = 0;
-    uint8_t mHeight = 0;
-
-    Vector3 mSpawnPoint = { };
+    jevarg::size<uint8_t> mSize{0};
+    jevarg::vec3<int> mSpawnPoint{0};
 };

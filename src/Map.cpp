@@ -21,12 +21,12 @@ Map::Map(const std::string &filePath) {
     bool spawnPointFound = false;
 
     while(std::getline(file, line)) {
-        mHeight++;
-        if (!mWidth) {
-            mWidth = line.length();
+        mSize.height++;
+        if (!mSize.width) {
+            mSize.width = static_cast<uint8_t>(line.length());
         }
 
-        if (mWidth != line.length()) {
+        if (mSize.width != line.length()) {
             std::cerr << "Invalid map!" << std::endl;
             return;
         }
@@ -44,7 +44,7 @@ Map::Map(const std::string &filePath) {
             if (c == '2' && !spawnPointFound) {
                 mSpawnPoint.x = x;
                 mSpawnPoint.y = y;
-                mSpawnPoint.z = Config::windowSize.y * 0.5;
+                mSpawnPoint.z = static_cast<int>(Config::windowSize.height * 0.5f);
                 spawnPointFound = true;
             }
 
@@ -54,8 +54,8 @@ Map::Map(const std::string &filePath) {
         y++;
     }
 
-    printf("Dimensions: %dx%d\n", mWidth, mHeight);
-    printf("Spawn point: (%f, %f)\n", mSpawnPoint.x, mSpawnPoint.y);
+    printf("Dimensions: %dx%d\n", mSize.width, mSize.height);
+    printf("Spawn point: (%d, %d)\n", mSpawnPoint.x, mSpawnPoint.y);
     mValid = true;
 
     file.close();
@@ -66,7 +66,7 @@ bool Map::isValid() const {
 }
 
 EntityType Map::get(uint8_t x, uint8_t y) const {
-    int pos = (y * mWidth) + x;
+    int pos = (y * mSize.width) + x;
     if (pos > mData.size()) {
         printf("Invalid position: (%d, %d)\n", x, y);
         return EntityType::Invalid;
@@ -75,16 +75,12 @@ EntityType Map::get(uint8_t x, uint8_t y) const {
     return mData[pos];
 }
 
-const Vector3 &Map::getSpawnPoint() const {
+const jevarg::vec3<int> &Map::getSpawnPoint() const {
     return mSpawnPoint;
 }
 
-uint8_t Map::getWidth() const {
-    return mWidth;
-}
-
-uint8_t Map::getHeight() const {
-    return mHeight;
+const jevarg::size<uint8_t> &Map::getSize() const {
+    return mSize;
 }
 
 void Map::render() const {}

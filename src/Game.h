@@ -27,5 +27,5 @@ private:
     Minimap mMinimap;
     Raycaster mRaycaster;
     Player mPlayer;
-    Texture2D mWallTex;
+//    Texture2D mWallTex;
 };

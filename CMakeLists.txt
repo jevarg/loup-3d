@@ -19,20 +19,20 @@ set(SOURCE_FILES
         src/Raycaster.cpp
         src/Raycaster.h
         src/Minimap.cpp
-        src/Minimap.h src/EntityType.h)
+        src/Minimap.h src/EntityType.h src/InputManager.cpp src/InputManager.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-unset(ENV{http_proxy})
-unset(ENV{https_proxy})
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/raylib.cmake)
+#unset(ENV{http_proxy})
+#unset(ENV{https_proxy})
+#include(${CMAKE_CURRENT_LIST_DIR}/cmake/raylib.cmake)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/jevarg/include)
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
-if (APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
-endif ()
+#if (APPLE)
+#    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
+#    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+#    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+#endif ()
 
-target_link_libraries(${PROJECT_NAME} raylib ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})

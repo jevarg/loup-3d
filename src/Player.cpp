@@ -6,41 +6,51 @@
 #include "Config.h"
 #include "Player.h"
 
-void Player::setPosition(Vector3 pos) {
+#ifndef PI
+    #define PI 3.14159265358979323846f
+#endif
+#ifndef DEG2RAD
+    #define DEG2RAD (PI/180.0f)
+#endif
+#ifndef RAD2DEG
+    #define RAD2DEG (180.0f/PI)
+#endif
+
+void Player::setPosition(jevarg::vec3<float> pos) {
     mPosition = pos;
 }
 
 void Player::render() const {}
 
-void Player::update() {
-    if (IsKeyDown(KEY_W)) {
+void Player::update(const InputManager &input) {
+    if (input[SDL_SCANCODE_W]) {
         mPosition.x += mDirection.x * Config::movementSpeed;
         mPosition.y += mDirection.y * Config::movementSpeed;
     }
 
-    if (IsKeyDown(KEY_S)) {
+    if (input[SDL_SCANCODE_S]) {
         mPosition.x -= mDirection.x * Config::movementSpeed;
         mPosition.y -= mDirection.y * Config::movementSpeed;
     }
 
-    if (IsKeyDown(KEY_A)) {
+    if (input[SDL_SCANCODE_A]) {
         mPosition.x += mDirection.y * Config::movementSpeed;
         mPosition.y -= mDirection.x * Config::movementSpeed;
     }
 
-    if (IsKeyDown(KEY_D)) {
+    if (input[SDL_SCANCODE_D]) {
         mPosition.x -= mDirection.y * Config::movementSpeed;
         mPosition.y += mDirection.x * Config::movementSpeed;
     }
 
     float angle;
     bool didRotate = false;
-    if (IsKeyDown(KEY_RIGHT)) {
+    if (input[SDL_SCANCODE_RIGHT]) {
         angle = Config::rotationSpeed * DEG2RAD;
         didRotate = true;
     }
 
-    if (IsKeyDown(KEY_LEFT)) {
+    if (input[SDL_SCANCODE_LEFT]) {
         angle = -Config::rotationSpeed * DEG2RAD;
         didRotate = true;
     }
@@ -53,10 +63,10 @@ void Player::update() {
     }
 }
 
-const Vector3 &Player::getPosition() const {
+const jevarg::vec3<float> &Player::getPosition() const {
     return mPosition;
 }
 
-const Vector2 &Player::getDirection() const {
+const jevarg::vec2<float> &Player::getDirection() const {
     return mDirection;
 }
