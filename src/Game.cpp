@@ -32,12 +32,9 @@ void Game::loop() {
 //        PollInputEvents();
         update();
 //
-//        ClearBackground(BLACK);
-//        BeginDrawing();
         render();
         mWindow.present();
 //        DrawFPS(Config::windowSize.width - 90, 10); // DEBUG
-//        EndDrawing();
         SDL_Delay(1000 / 60); // TODO: FPS counter
     }
 }

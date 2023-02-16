@@ -2,11 +2,11 @@
 // Created by jgravier on 23/01/2023.
 //
 
-#include "Window.h"
-#include "Config.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdlib>
+#include "Window.h"
+#include "Config.h"
 
 #define SDL_TRY(x) { \
     int _RET_CODE = x;                                          \
@@ -30,7 +30,7 @@ Window::Window() : mShouldClose(false) {
         std::exit(-1);
     }
 
-    mRenderer = SDL_CreateRenderer(mNativeWindow, 0, 0);
+    mRenderer = SDL_CreateRenderer(mNativeWindow, 0, SDL_RENDERER_ACCELERATED);
     if (mRenderer == nullptr) {
         std::cerr << "FATAL ERROR: " << SDL_GetError() << std::endl;
         std::exit(-1);
@@ -40,8 +40,9 @@ Window::Window() : mShouldClose(false) {
 }
 
 Window::~Window() {
+    SDL_DestroyRenderer(mRenderer);
+    SDL_DestroyWindow(mNativeWindow);
     SDL_Quit();
-//    CloseWindow();
 }
 
 bool Window::shouldClose() const {
