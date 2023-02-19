@@ -9,9 +9,8 @@
 
 Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
-               mRaycaster(mMap, mPlayer, mMinimap)
-//               mWallTex(LoadTexture("assets/wall.png"))
-               {
+               mRaycaster(mMap, mPlayer, mMinimap) {
+    mResourceMgr.loadResources(mWindow.getRenderer());
 }
 
 void Game::start() {
@@ -28,10 +27,7 @@ void Game::start() {
 void Game::loop() {
     while (!mWindow.shouldClose()) {
         mWindow.clear();
-//        SDL_UpdateWindowSurface(mWindow);
-//        PollInputEvents();
         update();
-//
         render();
         mWindow.present();
 //        DrawFPS(Config::windowSize.width - 90, 10); // DEBUG
@@ -54,6 +50,6 @@ void Game::update() {
 }
 
 void Game::render() {
-    mRaycaster.render(mWindow.getRenderer());
+    mRaycaster.render(mWindow.getRenderer(), mResourceMgr);
     mMinimap.render();
 }

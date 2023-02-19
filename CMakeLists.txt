@@ -19,7 +19,7 @@ set(SOURCE_FILES
         src/Raycaster.cpp
         src/Raycaster.h
         src/Minimap.cpp
-        src/Minimap.h src/EntityType.h src/InputManager.cpp src/InputManager.h)
+        src/Minimap.h src/EntityType.h src/InputManager.cpp src/InputManager.h src/ResourceManager.cpp src/ResourceManager.h src/Texture.cpp src/Texture.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

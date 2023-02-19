@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Raycaster.h"
 #include "Minimap.h"
+#include "ResourceManager.h"
 
 class Game {
 public:
@@ -27,5 +28,5 @@ private:
     Minimap mMinimap;
     Raycaster mRaycaster;
     Player mPlayer;
-//    Texture2D mWallTex;
+    ResourceManager mResourceMgr;
 };

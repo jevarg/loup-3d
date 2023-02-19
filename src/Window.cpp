@@ -8,16 +8,8 @@
 #include "Window.h"
 #include "Config.h"
 
-#define SDL_TRY(x) { \
-    int _RET_CODE = x;                                          \
-    if (_RET_CODE) {                                            \
-        std::cerr << "FATAL ERROR: " << SDL_GetError() << std::endl;  \
-        std::exit(_RET_CODE);                                   \
-    }                                                           \
-}
 
 Window::Window() : mShouldClose(false) {
-    SDL_TRY(SDL_Init(SDL_INIT_VIDEO))
     mNativeWindow = SDL_CreateWindow("Loup 3D",
                                      SDL_WINDOWPOS_UNDEFINED,
                                      SDL_WINDOWPOS_UNDEFINED,
@@ -42,7 +34,6 @@ Window::Window() : mShouldClose(false) {
 Window::~Window() {
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mNativeWindow);
-    SDL_Quit();
 }
 
 bool Window::shouldClose() const {
