@@ -22,17 +22,11 @@ Window::Window() : mShouldClose(false) {
         std::exit(-1);
     }
 
-    mRenderer = SDL_CreateRenderer(mNativeWindow, 0, SDL_RENDERER_ACCELERATED);
-    if (mRenderer == nullptr) {
-        std::cerr << "FATAL ERROR: " << SDL_GetError() << std::endl;
-        std::exit(-1);
-    }
-
+    mRenderer = std::make_shared<Renderer>(mNativeWindow);
 //    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 Window::~Window() {
-    SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mNativeWindow);
 }
 
@@ -41,8 +35,7 @@ bool Window::shouldClose() const {
 }
 
 void Window::clear() const {
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    SDL_RenderClear(mRenderer);
+    mRenderer->clear();
 }
 
 void Window::update() {
@@ -53,11 +46,11 @@ void Window::update() {
 }
 
 void Window::present() const {
-    SDL_RenderPresent(mRenderer);
+    mRenderer->present();
 }
 
-SDL_Renderer *Window::getRenderer() const {
-    return mRenderer;
+const Renderer &Window::getRenderer() const {
+    return *mRenderer;
 }
 
 const InputManager &Window::getInputManager() const {

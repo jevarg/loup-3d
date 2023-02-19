@@ -4,17 +4,34 @@
 
 #pragma once
 
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <jevarg.h>
 
 class Texture {
 public:
-    explicit Texture(SDL_Surface *s);
-    SDL_Surface *getNativeTexture() const;
-//    const jevarg::size<int> &getSize() const;
+    explicit Texture(SDL_Texture *texture, const jevarg::size<int> &s, bool writable);
+
+    const jevarg::size<int> &getSize() const;
+
+    bool isWritable() const;
+
+    bool isLocked() const;
+
+    SDL_Texture *getNativeTexture() const;
+
+    void lock();
+
+    void unlock();
+
+    void copyBuffer(void *buf);
 
 private:
-    SDL_Surface *mNativeTexture;
-//    SDL_PixelFormatEnum mFormat;
-//    jevarg::size<int> mSize;
+    SDL_Texture *mNativeTexture;
+    jevarg::size<int> mSize;
+    bool mWritable;
+    bool mLocked;
+
+    void *mPixels;
+    int mPitch;
+
 };

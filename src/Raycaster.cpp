@@ -13,16 +13,19 @@ enum HitSide {
     Y
 };
 
-Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap) :
-        mMap(map), mPlayer(player), mMinimap(minimap) {}
+Raycaster::Raycaster(const Map &map, const Player &player, const Minimap &minimap, Texture *renderTexture) :
+        mMap(map), mPlayer(player), mMinimap(minimap), mRenderTexture(renderTexture) {}
 
-void Raycaster::render(SDL_Renderer *renderer, const ResourceManager &resourceMgr) const {
-    mRenderFloor(renderer, resourceMgr);
+void Raycaster::render(const Renderer &renderer, const ResourceManager &resourceMgr) const {
+//    mRenderTexture->lock();
+//    mRenderFloor(renderer, resourceMgr);
+//    renderer.renderTexture(*mRenderTexture);
     mRenderWalls(renderer, resourceMgr); // TODO: Return wall hit points?
+//    mRenderTexture->unlock();
 }
 
-void Raycaster::mRenderFloor(SDL_Renderer *renderer, const ResourceManager &resourceMgr) const {
-    SDL_Surface *tex = resourceMgr.getTexture(ResourceID::TEX_FLOOR_1)->getNativeTexture();
+void Raycaster::mRenderFloor(const Renderer &renderer, const ResourceManager &resourceMgr) const {
+    SDL_Surface *tex = resourceMgr.getTexture(ResourceID::TEX_FLOOR_1);
     const jevarg::vec3<float> &playerPos = mPlayer.getPosition();
     const jevarg::vec2<float> &playerDir = mPlayer.getDirection();
     const jevarg::vec2<float> &leftRayDir = {
@@ -35,16 +38,8 @@ void Raycaster::mRenderFloor(SDL_Renderer *renderer, const ResourceManager &reso
             playerDir.y + playerDir.x
     };
 
-    SDL_Surface *testSurface = SDL_CreateRGBSurface(0,
-                                                    Config::windowSize.width,
-                                                    Config::windowSize.height,
-                                                    32,
-                                                    0,
-                                                    0,
-                                                    0,
-                                                    0);
-
-    SDL_Color *pixel = new SDL_Color{0, 255, 0, 255};
+    SDL_Color pixel{0, 255, 0, 255};
+    std::uint8_t *buffer = new std::uint8_t[Config::windowSize.width * Config::windowSize.height * 4];
 
     for (int y = Config::windowSize.height / 2 + 1; y < Config::windowSize.height; y++) {
         int pixelDist = y - Config::windowSize.height / 2;
@@ -79,17 +74,18 @@ void Raycaster::mRenderFloor(SDL_Renderer *renderer, const ResourceManager &reso
 //                printf("error: %s\n", SDL_GetError());
 //            }
 
-            int offset = (((ty * tex->w) + tx) * 3) % (tex->w * tex->h);
+//            int offset = (((ty * tex->w) + tx) * 3) % (tex->w * tex->h);
 //            SDL_Color *pixel = reinterpret_cast<SDL_Color *>(static_cast<uint8_t *>(tex->pixels) + offset);
 //            testSurface->pixels
 
 
-            int sOffset = (((y * testSurface->w) + x) * 4) % (testSurface->w * testSurface->h * 4);
-            uint8_t *toFill = static_cast<uint8_t *>(testSurface->pixels) + sOffset;
-            toFill[0] = pixel->r;
-            toFill[1] = pixel->g;
-            toFill[2] = pixel->b;
-            toFill[3] = pixel->a;
+            int sOffset = (((y * Config::windowSize.width) + x) * 4) %
+                          (Config::windowSize.width * Config::windowSize.height * 4);
+//            uint8_t *toFill = static_cast<uint8_t *>(testSurface->pixels) + sOffset;
+            (buffer + sOffset)[0] = pixel.r;
+            (buffer + sOffset)[1] = pixel.g;
+            (buffer + sOffset)[2] = pixel.b;
+            (buffer + sOffset)[3] = pixel.a;
 
 //            SDL_RenderDrawPoint(renderer, x, y);
 
@@ -98,28 +94,18 @@ void Raycaster::mRenderFloor(SDL_Renderer *renderer, const ResourceManager &reso
 //            DrawPixel(x, y, *pixel);
         }
     }
-
-//    SDL_Render
-//    SDL_RenderDrawPoints()
-    SDL_Texture *t = SDL_CreateTextureFromSurface(renderer, testSurface);
-    SDL_Rect src{0, 0, testSurface->w, testSurface->h};
-    SDL_Rect dst{0, 0, Config::windowSize.width, Config::windowSize.height};
-    SDL_SetRenderDrawColor(renderer, pixel->r, pixel->g, pixel->b, pixel->a);
-    SDL_RenderCopy(renderer, t, &src, &dst);
-    SDL_DestroyTexture(t);
-    SDL_FreeSurface(testSurface);
-    delete pixel;
-
+    mRenderTexture->copyBuffer(buffer);
+    delete[] buffer;
 }
 
-void Raycaster::mRenderWalls(SDL_Renderer *renderer, const ResourceManager &resourceMgr) const {
+void Raycaster::mRenderWalls(const Renderer &renderer, const ResourceManager &resourceMgr) const {
     const jevarg::vec2<float> &playerDir = mPlayer.getDirection();
     const jevarg::vec3<float> &playerPos = mPlayer.getPosition();
     std::vector<HitPoint> hitPoints;
 
     for (int x = 0; x < static_cast<int>(Config::windowSize.width); x++) {
         float camX = 2.0f * static_cast<float>(x) / Config::windowSize.width - 1;
-        jevarg::vec2<float> rayDir {
+        jevarg::vec2<float> rayDir{
                 playerDir.x - playerDir.y * camX,
                 playerDir.y + playerDir.x * camX
         };
@@ -177,7 +163,7 @@ void Raycaster::mRenderWalls(SDL_Renderer *renderer, const ResourceManager &reso
         }
 
         jevarg::vec2<float> hitPoint = {playerPos.x + perpendicularDist * rayDir.x,
-                            playerPos.y + perpendicularDist * rayDir.y};
+                                        playerPos.y + perpendicularDist * rayDir.y};
 
         hitPoints.push_back(HitPoint{hitPoint, perpendicularDist});
 
@@ -199,8 +185,8 @@ void Raycaster::mRenderWalls(SDL_Renderer *renderer, const ResourceManager &reso
         int drawStart = -wallHeight / 2 + static_cast<int>(Config::windowSize.height) / 2;
         int drawEnd = wallHeight / 2 + static_cast<int>(Config::windowSize.height) / 2;
 
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderDrawLineF(renderer, x, drawStart, x, drawEnd);
+        SDL_SetRenderDrawColor(renderer.getMNativeRenderer(), 255, 0, 0, 255);
+        SDL_RenderDrawLineF(renderer.getMNativeRenderer(), x, drawStart, x, drawEnd);
 //
 //        Rectangle rectSrc = {static_cast<float>(texX), 0, 1.0, static_cast<float>(wallTex.height)};
 //        Rectangle rectDst = {static_cast<float>(x), static_cast<float>(drawStart), 1,

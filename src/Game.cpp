@@ -9,8 +9,11 @@
 
 Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
-               mRaycaster(mMap, mPlayer, mMinimap) {
-    mResourceMgr.loadResources(mWindow.getRenderer());
+               mRaycaster(mMap,
+                          mPlayer,
+                          mMinimap,
+                          mWindow.getRenderer().createTexture(Config::windowSize, true)) {
+    mResourceMgr.loadResources();
 }
 
 void Game::start() {
