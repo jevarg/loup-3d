@@ -34,7 +34,7 @@ void Game::loop() {
         render();
         mWindow.present();
 //        DrawFPS(Config::windowSize.width - 90, 10); // DEBUG
-        SDL_Delay(1000 / 60); // TODO: FPS counter
+        SDL_Delay(1000 / 100); // TODO: FPS counter
     }
 }
 

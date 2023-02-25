@@ -5,7 +5,6 @@
 #include <jevarg.h>
 #include <iostream>
 #include "Texture.h"
-#include "Config.h"
 
 Texture::Texture(SDL_Texture *texture, const jevarg::size<int> &s, bool writable) :
         mNativeTexture(texture),
