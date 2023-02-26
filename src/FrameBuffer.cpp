@@ -9,6 +9,9 @@ FrameBuffer::FrameBuffer(const jevarg::size<int> &size) : mData(size.width * siz
 }
 
 void FrameBuffer::drawPixel(int x, int y, const jevarg::color &color) {
+    if (x < 0 || y < 0)
+        return;
+
     int offset = (y * mSize.width + x) * 4;
 
     mData[offset] = color.r;
