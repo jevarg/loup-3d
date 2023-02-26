@@ -5,6 +5,7 @@
 #pragma once
 
 #include <SDL2/SDL_render.h>
+#include <memory>
 #include "Texture.h"
 
 class Renderer {
@@ -17,15 +18,13 @@ public:
 
     void present() const;
 
-    Texture *createTexture(const jevarg::size<int> &size, bool writable = false) const;
+    SDL_Renderer *getNativeRenderer();
+
+//    Texture *createTexture(const jevarg::size<int> &size, bool writable = false) const;
 
     void renderTexture(const Texture &texture) const;
 
 private:
     SDL_Renderer *mNativeRenderer;
-public:
-    SDL_Renderer *getMNativeRenderer() const;
-
-private:
-    SDL_Texture *mStreamedTexture;
+//    SDL_Texture *mStreamedTexture;
 };

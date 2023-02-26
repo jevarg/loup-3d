@@ -9,6 +9,7 @@
 #include "Minimap.h"
 #include "ResourceManager.h"
 #include "Config.h"
+#include "FrameBuffer.h"
 #include <vector>
 #include <jevarg.h>
 #include <SDL2/SDL.h>
@@ -20,18 +21,17 @@ struct HitPoint {
 
 class Raycaster {
 public:
-    explicit Raycaster(const Map &map, const Player &player, const Minimap &minimap, Texture *renderTexture);
+    explicit Raycaster(const Map &map, const Player &player, const Minimap &minimap);
 
-    void render(const Renderer &renderer, const ResourceManager &resourceMgr);
+    void render(FrameBuffer &frameBuffer, const ResourceManager &resourceMgr);
 
 private:
-    void mRenderWalls(const Renderer &renderer, const ResourceManager &resourceMgr);
+    void mRenderWalls(FrameBuffer &frameBuffer, const ResourceManager &resourceMgr);
 
-    void mRenderFloor(const Renderer &renderer, const ResourceManager &resourceMgr);
+    void mRenderFloor(FrameBuffer &frameBuffer, const ResourceManager &resourceMgr);
 
     const Map &mMap;
     const Player &mPlayer;
     const Minimap &mMinimap;
-    std::vector<std::uint8_t> mBuffer;
-    Texture *mRenderTexture;
+//    std::vector<std::uint8_t> mBuffer;
 };

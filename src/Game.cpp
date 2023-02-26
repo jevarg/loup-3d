@@ -11,8 +11,7 @@ Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
                mRaycaster(mMap,
                           mPlayer,
-                          mMinimap,
-                          mWindow.getRenderer().createTexture(Config::windowSize, true)) {
+                          mMinimap) {
     mResourceMgr.loadResources();
 }
 
@@ -32,9 +31,10 @@ void Game::loop() {
         mWindow.clear();
         update();
         render();
+        mWindow.swapBuffers();
         mWindow.present();
-//        DrawFPS(Config::windowSize.width - 90, 10); // DEBUG
-        SDL_Delay(1000 / 100); // TODO: FPS counter
+
+        SDL_Delay(1000 / Config::maxFPS); // TODO: FPS counter
     }
 }
 
@@ -53,6 +53,6 @@ void Game::update() {
 }
 
 void Game::render() {
-    mRaycaster.render(mWindow.getRenderer(), mResourceMgr);
-    mMinimap.render();
+    mRaycaster.render(mWindow.getFrameBuffer(), mResourceMgr);
+    mMinimap.render(mWindow.getFrameBuffer());
 }

@@ -7,3 +7,4 @@
 #include "../src/vec2.h"
 #include "../src/vec3.h"
 #include "../src/size.h"
+#include "../src/color.h"

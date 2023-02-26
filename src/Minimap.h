@@ -7,14 +7,18 @@
 #include <jevarg.h>
 #include "Player.h"
 #include "Map.h"
+#include "FrameBuffer.h"
 
 struct HitPoint;
 
 class Minimap {
 public:
     explicit Minimap(const Player &player, const Map &map);
-    void render() const;
-    void drawPlayerFOV(const std::vector<HitPoint> &hitPoints) const;
+
+    void render(FrameBuffer &frameBuffer) const;
+
+    void drawPlayerFOV(FrameBuffer &frameBuffer, const std::vector<HitPoint> &hitPoints) const;
+
     const jevarg::size<int> &getCellSize() const;
 
 private:

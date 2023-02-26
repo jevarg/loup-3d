@@ -11,10 +11,9 @@ Texture::Texture(SDL_Texture *texture, const jevarg::size<int> &s, bool writable
         mSize(s),
         mWritable(writable),
         mLocked(false),
-        mPixels(nullptr) {
-    lock();
-    std::memset(mPixels, 0, mPitch * mSize.height);
-    unlock();
+        mPixels(nullptr),
+        mPitch(0) {
+    fill(0);
 }
 
 const jevarg::size<int> &Texture::getSize() const {
@@ -59,7 +58,14 @@ void Texture::unlock() {
     mLocked = false;
 }
 
-void Texture::copyBuffer(void *buf) {
+void Texture::fill(std::uint8_t n) {
+    lock();
+    std::memset(mPixels, n, mPitch * mSize.height);
+    unlock();
+}
+
+
+void Texture::copyBuffer(const std::uint8_t *buf) {
     if (!mLocked) {
         std::cerr << "Ignored: texture not locked" << std::endl;
         return;

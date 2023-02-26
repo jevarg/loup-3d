@@ -6,6 +6,7 @@
 
 #include "InputManager.h"
 #include "Renderer.h"
+#include "FrameBuffer.h"
 #include <memory>
 #include <SDL2/SDL.h>
 
@@ -17,11 +18,15 @@ public:
 
     void update();
 
+    void swapBuffers();
+
     void present() const;
 
-    void clear() const;
+    void clear();
 
     bool shouldClose() const;
+
+    FrameBuffer &getFrameBuffer();
 
     const Renderer &getRenderer() const;
 
@@ -30,6 +35,8 @@ public:
 private:
     bool mShouldClose;
     SDL_Window *mNativeWindow;
-    std::shared_ptr<Renderer> mRenderer;
     InputManager mInputManager;
+    FrameBuffer mFrameBuffer;
+    Renderer mRenderer;
+    std::unique_ptr<Texture> mVideoMemory;
 };

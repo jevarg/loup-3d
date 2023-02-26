@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL_render.h>
 #include <jevarg.h>
+#include <cstdint>
 
 class Texture {
 public:
@@ -23,7 +24,9 @@ public:
 
     void unlock();
 
-    void copyBuffer(void *buf);
+    void fill(std::uint8_t n);
+
+    void copyBuffer(const std::uint8_t *buf);
 
 private:
     SDL_Texture *mNativeTexture;
