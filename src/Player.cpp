@@ -2,61 +2,53 @@
 // Created by jgravier on 23/01/2023.
 //
 
-#include <cmath>
 #include "Config.h"
 #include "Player.h"
 
-void Player::setPosition(Vector3 pos) {
+void Player::setPosition(const jevarg::vec3<float> &pos) {
     mPosition = pos;
 }
 
 void Player::render() const {}
 
-void Player::update() {
-    if (IsKeyDown(KEY_W)) {
-        mPosition.x += mDirection.x * Config::movementSpeed;
-        mPosition.y += mDirection.y * Config::movementSpeed;
+void Player::update(const InputManager &input) {
+    float movementSpeed = Config::movementSpeed;
+    if (input.isModPressed(KMOD_CTRL)) {
+        movementSpeed *= 1.5;
     }
 
-    if (IsKeyDown(KEY_S)) {
-        mPosition.x -= mDirection.x * Config::movementSpeed;
-        mPosition.y -= mDirection.y * Config::movementSpeed;
+    if (input.isKeyPressed(SDL_SCANCODE_W)) {
+        mPosition.x += mDirection.x * movementSpeed;
+        mPosition.y += mDirection.y * movementSpeed;
     }
 
-    if (IsKeyDown(KEY_A)) {
-        mPosition.x += mDirection.y * Config::movementSpeed;
-        mPosition.y -= mDirection.x * Config::movementSpeed;
+    if (input.isKeyPressed(SDL_SCANCODE_S)) {
+        mPosition.x -= mDirection.x * movementSpeed;
+        mPosition.y -= mDirection.y * movementSpeed;
     }
 
-    if (IsKeyDown(KEY_D)) {
-        mPosition.x -= mDirection.y * Config::movementSpeed;
-        mPosition.y += mDirection.x * Config::movementSpeed;
+    if (input.isKeyPressed(SDL_SCANCODE_A)) {
+        mPosition.x += mDirection.y * movementSpeed;
+        mPosition.y -= mDirection.x * movementSpeed;
     }
 
-    float angle;
-    bool didRotate = false;
-    if (IsKeyDown(KEY_RIGHT)) {
-        angle = Config::rotationSpeed * DEG2RAD;
-        didRotate = true;
+    if (input.isKeyPressed(SDL_SCANCODE_D)) {
+        mPosition.x -= mDirection.y * movementSpeed;
+        mPosition.y += mDirection.x * movementSpeed;
     }
 
-    if (IsKeyDown(KEY_LEFT)) {
-        angle = -Config::rotationSpeed * DEG2RAD;
-        didRotate = true;
+    if (input.isKeyPressed(SDL_SCANCODE_SPACE)) {
+        mPosition.z += 1.0f;
     }
 
-    if (didRotate) {
-        mDirection = {
-                mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
-                mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
-        };
-    }
+    const jevarg::vec2 mouseDelta = input.getMouseDelta();
+    mDirection.rotate(mouseDelta.x);
 }
 
-const Vector3 &Player::getPosition() const {
+const jevarg::vec3<float> &Player::getPosition() const {
     return mPosition;
 }
 
-const Vector2 &Player::getDirection() const {
+const jevarg::vec2<float> &Player::getDirection() const {
     return mDirection;
 }

@@ -4,18 +4,22 @@
 
 #pragma once
 
-#include <raylib.h>
+#include <jevarg.h>
+#include "InputManager.h"
 
 class Player {
 public:
-    void setPosition(Vector3 pos);
-    void update();
+    void setPosition(const jevarg::vec3<float> &pos);
+
+    void update(const InputManager &input);
+
     void render() const;
 
-    const Vector3 &getPosition() const;
-    const Vector2 &getDirection() const;
+    const jevarg::vec3<float> &getPosition() const;
+
+    const jevarg::vec2<float> &getDirection() const;
 
 private:
-    Vector3 mPosition{};
-    Vector2 mDirection{0, 1};
+    jevarg::vec3<float> mPosition{0};
+    jevarg::vec2<float> mDirection{0, 1};
 };

@@ -4,14 +4,15 @@
 
 #include "Game.h"
 #include "Config.h"
-#include <raylib.h>
 #include <iostream>
 #include <cmath>
 
 Game::Game() : mMap("first.map"),
                mMinimap(mPlayer, mMap),
-               mRaycaster(mMap, mPlayer, mMinimap),
-               mWallTex(LoadTexture("assets/wall.png")) {
+               mRaycaster(mMap,
+                          mPlayer,
+                          mMinimap) {
+    mResourceMgr.loadResources();
 }
 
 void Game::start() {
@@ -21,29 +22,30 @@ void Game::start() {
     }
 
     std::cout << "Starting new game!" << std::endl;
-    mPlayer.setPosition(mMap.getSpawnPoint());
+    mPlayer.setPosition(static_cast<jevarg::vec3<float>>(mMap.getSpawnPoint()));
     loop();
 }
 
 void Game::loop() {
     while (!mWindow.shouldClose()) {
-        PollInputEvents();
+        mWindow.clear();
         update();
-
-        ClearBackground(BLACK);
-        BeginDrawing();
         render();
-        DrawFPS(Config::windowSize.x - 90, 10); // DEBUG
-        EndDrawing();
+        mWindow.swapBuffers();
+        mWindow.present();
+
+        SDL_Delay(1000 / Config::maxFPS); // TODO: FPS counter
     }
 }
 
 void Game::update() {
-    Vector3 prevPos = mPlayer.getPosition();
-    mPlayer.update();
+    mWindow.update();
 
-    Vector3 pos = mPlayer.getPosition();
-    Vector2 playerCellPos = {std::floor(pos.x), std::floor(pos.y)};
+    jevarg::vec3 prevPos = mPlayer.getPosition();
+    mPlayer.update(mWindow.getInputManager());
+
+    jevarg::vec3 pos = mPlayer.getPosition();
+    jevarg::vec2 playerCellPos = {std::floor(pos.x), std::floor(pos.y)};
 
     if (mMap.get(static_cast<uint8_t>(playerCellPos.x), static_cast<uint8_t>(playerCellPos.y)) == EntityType::Wall) {
         mPlayer.setPosition(prevPos);
@@ -51,6 +53,6 @@ void Game::update() {
 }
 
 void Game::render() {
-    mRaycaster.render(mWallTex);
-    mMinimap.render();
+    mRaycaster.render(mWindow.getFrameBuffer(), mResourceMgr);
+    mMinimap.render(mWindow.getFrameBuffer());
 }
