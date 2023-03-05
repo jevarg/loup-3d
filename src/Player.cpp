@@ -2,7 +2,6 @@
 // Created by jgravier on 23/01/2023.
 //
 
-#include <cmath>
 #include "Config.h"
 #include "Player.h"
 
@@ -48,14 +47,12 @@ void Player::update(const InputManager &input) {
         mPosition.y += mDirection.x * movementSpeed;
     }
 
+    if (input.isKeyPressed(SDL_SCANCODE_SPACE)) {
+        mPosition.z += 1.0f;
+    }
 
     const jevarg::vec2 mouseDelta = input.getMouseDelta();
-//    float angle = ;
     mDirection.rotate(mouseDelta.x);
-//    mDirection = {
-//            mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
-//            mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
-//    };
 }
 
 const jevarg::vec3<float> &Player::getPosition() const {
