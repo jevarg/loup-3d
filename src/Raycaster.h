@@ -33,5 +33,4 @@ private:
     const Map &mMap;
     const Player &mPlayer;
     const Minimap &mMinimap;
-//    std::vector<std::uint8_t> mBuffer;
 };

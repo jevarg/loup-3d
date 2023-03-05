@@ -13,15 +13,20 @@ class FrameBuffer {
 public:
     explicit FrameBuffer(const jevarg::size<int> &size);
 
+    void fill(const jevarg::color &pixel);
+
+    const std::uint8_t *getData() const;
+
     void drawPixel(int x, int y, const jevarg::color &color);
 
     void drawPixel(const jevarg::vec2<int> &pos, const jevarg::color &color);
 
     void drawLine(const jevarg::vec2<int> &src, const jevarg::vec2<int> &dst, const jevarg::color &color);
 
-    void fill(const jevarg::color &pixel);
+    void drawRectangle(const jevarg::vec2<int> &pos, const jevarg::size<int> &size, const jevarg::color &color);
 
-    const std::uint8_t *getData() const;
+    void
+    drawRectangle(const jevarg::vec2<int> &pos, const jevarg::size<int> &size, float angle, const jevarg::color &color);
 
 private:
     std::vector<std::uint8_t> mData;

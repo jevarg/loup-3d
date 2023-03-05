@@ -50,11 +50,12 @@ void Player::update(const InputManager &input) {
 
 
     const jevarg::vec2 mouseDelta = input.getMouseDelta();
-    float angle = mouseDelta.x;
-    mDirection = {
-            mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
-            mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
-    };
+//    float angle = ;
+    mDirection.rotate(mouseDelta.x);
+//    mDirection = {
+//            mDirection.x * std::cos(angle) - mDirection.y * std::sin(angle),
+//            mDirection.x * std::sin(angle) + mDirection.y * std::cos(angle)
+//    };
 }
 
 const jevarg::vec3<float> &Player::getPosition() const {

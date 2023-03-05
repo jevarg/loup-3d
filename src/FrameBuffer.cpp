@@ -8,6 +8,16 @@ FrameBuffer::FrameBuffer(const jevarg::size<int> &size) : mData(size.width * siz
     std::fill(mData.begin(), mData.end(), 0);
 }
 
+const std::uint8_t *FrameBuffer::getData() const {
+    return mData.data();
+}
+
+void FrameBuffer::fill(const jevarg::color &pixel) {
+    for (int i = 0; i < mData.size() / 4; ++i) {
+        reinterpret_cast<jevarg::color *>(mData.data())[i] = pixel;
+    }
+}
+
 void FrameBuffer::drawPixel(int x, int y, const jevarg::color &color) {
     if (x < 0 || y < 0)
         return;
@@ -22,17 +32,6 @@ void FrameBuffer::drawPixel(int x, int y, const jevarg::color &color) {
 
 void FrameBuffer::drawPixel(const jevarg::vec2<int> &pos, const jevarg::color &color) {
     drawPixel(pos.x, pos.y, color);
-}
-
-void FrameBuffer::fill(const jevarg::color &pixel) {
-    for (int i = 0; i < mData.size() / 4; ++i) {
-        reinterpret_cast<jevarg::color *>(mData.data())[i] = pixel;
-    }
-//    std::fill(mData.begin(), mData.end(), 0);
-}
-
-const std::uint8_t *FrameBuffer::getData() const {
-    return mData.data();
 }
 
 void FrameBuffer::drawLine(const jevarg::vec2<int> &src, const jevarg::vec2<int> &dst, const jevarg::color &color) {
@@ -57,5 +56,41 @@ void FrameBuffer::drawLine(const jevarg::vec2<int> &src, const jevarg::vec2<int>
             err += dx;
             y += sy;
         }
+    }
+}
+
+void
+FrameBuffer::drawRectangle(const jevarg::vec2<int> &pos, const jevarg::size<int> &size, const jevarg::color &color) {
+    int endX = pos.x + size.width;
+    int endY = pos.y + size.height;
+
+    for (int y = pos.y; y < endY; ++y) {
+        drawLine({pos.x, y}, {endX, y}, color);
+    }
+}
+
+void FrameBuffer::drawRectangle(const jevarg::vec2<int> &pos, const jevarg::size<int> &size, float angle,
+                                const jevarg::color &color) {
+
+    int startX = pos.x - size.width / 2;
+    int endX = startX + size.width;
+
+    jevarg::vec2<int> lineStart{0};
+    jevarg::vec2<int> lineEnd{0};
+    for (int i = 0; i < size.height; ++i) {
+        int y = (pos.y + i) - (size.height - 1) / 2;
+
+        lineStart.x = startX;
+        lineStart.y = y;
+
+        lineEnd.x = endX;
+        lineEnd.y = y;
+
+        if (angle != 0) {
+            lineStart.rotate(angle, pos);
+            lineEnd.rotate(angle, pos);
+        }
+
+        drawLine(lineStart, lineEnd, color);
     }
 }

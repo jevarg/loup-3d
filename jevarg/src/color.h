@@ -18,6 +18,8 @@ namespace jevarg {
 
         static constexpr color green() { return {0x59, 0x98, 0x1A, 0xff}; };
 
+        static constexpr color red() { return {0xD1, 0x00, 0x00, 0xff}; };
+
         std::uint8_t r;
         std::uint8_t g;
         std::uint8_t b;

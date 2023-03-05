@@ -30,25 +30,26 @@ void Minimap::render(FrameBuffer &frameBuffer) const {
             case EntityType::Wall:
                 color = jevarg::color::blue();
                 break;
-//            default:
-//                continue;
-//                color = GRAY;
-//                break;
+            default:
+                continue;
         }
 
         int x = (i % mapSize.width) * mCellSize.width;
         int y = (i / mapSize.width) * mCellSize.height;
 
-//        DrawRectangle(x, y, mCellSize.width, mCellSize.height, color);
+        frameBuffer.drawRectangle({x, y}, mCellSize, color);
     }
 
     const jevarg::vec3<float> &playerPos = mPlayer.getPosition();
     const jevarg::vec2<float> &playerDir = mPlayer.getDirection();
-    float angle = std::atan2(playerDir.y, playerDir.x) * RAD2DEG;
-    SDL_Rect r = {static_cast<int>(playerPos.x * mCellSize.width), static_cast<int>(playerPos.y * mCellSize.height), 10,
-                  10};
+    float angle = std::atan2(playerDir.y, playerDir.x);
 
-//    DrawRectanglePro(r, {r.width / 2, r.height / 2}, angle, RED);
+    frameBuffer.drawRectangle(
+            {static_cast<int>(playerPos.x * mCellSize.width), static_cast<int>(playerPos.y * mCellSize.height)},
+            {10, 10},
+            angle,
+            jevarg::color::red());
+
     frameBuffer.drawLine(
             {static_cast<int>(playerPos.x * mCellSize.width), static_cast<int>(playerPos.y * mCellSize.height)},
             {static_cast<int>(playerPos.x * mCellSize.width + playerDir.x * 100),
