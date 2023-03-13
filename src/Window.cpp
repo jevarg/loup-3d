@@ -8,7 +8,6 @@
 #include "Window.h"
 #include "Config.h"
 
-
 Window::Window() : mShouldClose(false),
                    mNativeWindow(SDL_CreateWindow("Loup 3D",
                                                   SDL_WINDOWPOS_UNDEFINED,
@@ -17,7 +16,7 @@ Window::Window() : mShouldClose(false),
                                                   Config::windowSize.height,
                                                   0)),
                    mRenderer(mNativeWindow),
-                   mFrameBuffer(Config::windowSize) {
+                   mFrameBuffer(Config::rendererSize) {
     if (mNativeWindow == nullptr) {
         std::cerr << "FATAL ERROR: " << SDL_GetError() << std::endl;
         std::exit(-1);
@@ -28,14 +27,14 @@ Window::Window() : mShouldClose(false),
     SDL_Texture *tex = SDL_CreateTexture(mRenderer.getNativeRenderer(),
                                          SDL_PIXELFORMAT_ABGR8888,
                                          SDL_TEXTUREACCESS_STREAMING,
-                                         Config::windowSize.width,
-                                         Config::windowSize.height);
+                                         Config::rendererSize.width,
+                                         Config::rendererSize.height);
     if (tex == nullptr) {
         std::cerr << "FATAL ERROR: " << SDL_GetError() << std::endl;
         std::exit(-1);
     }
 
-    mVideoMemory = std::make_unique<Texture>(tex, Config::windowSize, true);
+    mVideoMemory = std::make_unique<Texture>(tex, Config::rendererSize, true);
 }
 
 Window::~Window() {

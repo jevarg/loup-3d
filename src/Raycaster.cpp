@@ -37,13 +37,13 @@ void Raycaster::mRenderFloor(FrameBuffer &frameBuffer, const ResourceManager &re
             playerDir.y + playerDir.x
     };
 
-    for (int y = Config::windowSize.height / 2 + 1; y < Config::windowSize.height; y++) {
-        int pixelDist = y - Config::windowSize.height / 2;
+    for (int y = Config::rendererSize.height / 2 + 1; y < Config::rendererSize.height; y++) {
+        int pixelDist = y - Config::rendererSize.height / 2;
         float rowDist = playerPos.z / pixelDist;
 
         const jevarg::vec2<float> &floorStep = {
-                rowDist * (rightRayDir.x - leftRayDir.x) / Config::windowSize.width,
-                rowDist * (rightRayDir.y - leftRayDir.y) / Config::windowSize.width,
+                rowDist * (rightRayDir.x - leftRayDir.x) / Config::rendererSize.width,
+                rowDist * (rightRayDir.y - leftRayDir.y) / Config::rendererSize.width,
         };
 
         jevarg::vec2<float> floorPoint = {
@@ -51,7 +51,7 @@ void Raycaster::mRenderFloor(FrameBuffer &frameBuffer, const ResourceManager &re
                 playerPos.y + rowDist * leftRayDir.y,
         };
 
-        for (int x = 0; x < Config::windowSize.width; ++x) {
+        for (int x = 0; x < Config::rendererSize.width; ++x) {
             int cellX = static_cast<int>(floorPoint.x);
             int cellY = static_cast<int>(floorPoint.y);
 
@@ -74,8 +74,8 @@ void Raycaster::mRenderWalls(FrameBuffer &frameBuffer, const ResourceManager &re
     SDL_Surface *tex = resourceMgr.getTexture(ResourceID::TEX_WALL_1);
     std::vector<HitPoint> hitPoints;
 
-    for (int x = 0; x < static_cast<int>(Config::windowSize.width); x++) {
-        float camX = 2.0f * static_cast<float>(x) / Config::windowSize.width - 1;
+    for (int x = 0; x < static_cast<int>(Config::rendererSize.width); x++) {
+        float camX = 2.0f * static_cast<float>(x) / Config::rendererSize.width - 1;
         jevarg::vec2<float> rayDir{
                 playerDir.x - playerDir.y * camX,
                 playerDir.y + playerDir.x * camX
@@ -150,10 +150,10 @@ void Raycaster::mRenderWalls(FrameBuffer &frameBuffer, const ResourceManager &re
             texX = tex->w - texX - 1;
         }
 
-        int wallHeight = static_cast<int>(Config::windowSize.height / perpendicularDist);
-        int drawStart = -wallHeight / 2 + static_cast<int>(Config::windowSize.height) / 2;
-        int drawEnd = std::min(Config::windowSize.height,
-                               wallHeight / 2 + static_cast<int>(Config::windowSize.height) / 2);
+        int wallHeight = static_cast<int>(Config::rendererSize.height / perpendicularDist);
+        int drawStart = -wallHeight / 2 + static_cast<int>(Config::rendererSize.height) / 2;
+        int drawEnd = std::min(Config::rendererSize.height,
+                               wallHeight / 2 + static_cast<int>(Config::rendererSize.height) / 2);
 
         float texStep = static_cast<float>(tex->h) / static_cast<float>(wallHeight);
         for (int y = drawStart; y < drawEnd; ++y) {

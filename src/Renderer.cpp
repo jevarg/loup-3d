@@ -28,8 +28,10 @@ void Renderer::present() const {
 }
 
 void Renderer::renderTexture(const Texture &texture) const {
-    SDL_Rect rect{0, 0, Config::windowSize.width, Config::windowSize.height};
-    SDL_RenderCopy(mNativeRenderer, texture.getNativeTexture(), &rect, &rect);
+    SDL_Rect srcRect{0, 0, texture.getSize().width, texture.getSize().height};
+    SDL_Rect dstRect{0, 0, Config::windowSize.width, Config::windowSize.height};
+
+    SDL_RenderCopy(mNativeRenderer, texture.getNativeTexture(), &srcRect, &dstRect);
 }
 
 SDL_Renderer *Renderer::getNativeRenderer() {

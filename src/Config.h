@@ -10,6 +10,7 @@
 class Config {
 public:
     constexpr static const jevarg::size<int> windowSize{800, 600};
+    constexpr static const jevarg::size<int> rendererSize = windowSize * 0.5f;
     constexpr static const uint8_t maxFPS = 60;
     constexpr static const float fieldOfView = 70.0f;
     constexpr static const float mapScale = 0.5f;

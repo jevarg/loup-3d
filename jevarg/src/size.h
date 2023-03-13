@@ -9,14 +9,17 @@ namespace jevarg {
     class size {
     public:
         constexpr size(T width, T height) : width(width), height(height) {};
+
         explicit size(T n) : size(n, n) {};
 
-        template<class U> explicit operator size<U>() {
+        template<class U>
+        explicit operator size<U>() {
             return size<U>{static_cast<U>(width),
                            static_cast<U>(height)};
         };
 
-        template<class U> size<T> operator* (U n) const {
+        template<class U>
+        constexpr size<T> operator*(U n) const {
             return size<T>{static_cast<T>(width * n),
                            static_cast<T>(height * n)};
         }
