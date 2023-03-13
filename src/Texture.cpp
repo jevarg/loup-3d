@@ -4,6 +4,7 @@
 
 #include <jevarg.h>
 #include <iostream>
+#include <cstring>
 #include "Texture.h"
 
 Texture::Texture(SDL_Texture *texture, const jevarg::size<int> &s, bool writable) :

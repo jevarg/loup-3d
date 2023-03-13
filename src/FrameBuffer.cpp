@@ -39,6 +39,8 @@ constexpr uint32_t colorPalette[256] = {
         0x808080, 0xff0000, 0x00ff00, 0xffff00, 0x0000ff, 0xff00ff, 0x00ffff, 0xffffff
 };
 
+
+
 FrameBuffer::FrameBuffer(const jevarg::size<int> &size) : mData(size.width * size.height * 4), mSize(size) {
     std::fill(mData.begin(), mData.end(), 0);
 }
@@ -53,36 +55,94 @@ void FrameBuffer::fill(const jevarg::color &pixel) {
     }
 }
 
+void FrameBuffer::filter() {
+    for (size_t i = 0; i < (400 * 300); i++)
+    {
+        int p = i * 4;
+        int g = 0;
+
+        for (size_t k = 0; k < 3; k++)
+        {
+            g += mData[p + k] / 3;
+        }
+
+
+        for (size_t k = 0; k < 3; k++)
+        {
+            mData[p + k] = g;
+        }
+    }
+
+    static const uint8_t filter[9] = {
+        1, 2, 1,
+        0, 0, 0,
+        1, 2, 1
+    };
+    static const uint8_t norm = 8;
+
+    auto getPixelAt = [&](int x, int y, int k) {
+        return mData[k + (y * 400 + x) * 4];
+    };
+
+    auto copyVec = mData;
+
+    for (size_t y = 1; y < 300-1; y++)  {
+        for (size_t x = 1; x < 400-1; x++)  {
+
+            int p = (y * 400 + x) * 4;
+            for (size_t k = 0; k < 3; k++) {
+                uint filterValue = 0;
+
+                for (size_t fy = 0; fy < 3; fy++) {
+                    for (size_t fx = 0; fx < 3; fx++) {
+                        int input = getPixelAt(x+(fx-1), y+(fy-1), k);
+                        filterValue += (int)filter[fy*3+fx] * input;
+                    }
+                }
+
+                copyVec[p + k] = filterValue / norm;
+            }
+        }
+    }
+    
+    mData = copyVec;
+}
+
 void FrameBuffer::drawPixel(int x, int y, const jevarg::color &color) {
     if (x < 0 || y < 0)
         return;
 
-    float r1 = color.r / 255.0f;
-    float g1 = color.g / 255.0f;
-    float b1 = color.b / 255.0f;
+    // float r1 = color.r / 255.0f;
+    // float g1 = color.g / 255.0f;
+    // float b1 = color.b / 255.0f;
 
-    int closestIndex = 0;
-    float closestDist = 0;
-    for (int i = 0; i < 256; ++i) {
-        float r2 = ((colorPalette[i] & 0xff0000) >> 16) / 255.0f;
-        float g2 = ((colorPalette[i] & 0x00ff00) >> 8) / 255.0f;
-        float b2 = ((colorPalette[i] & 0x0000ff)) / 255.0f;
+    // int closestIndex = 0;
+    // float closestDist = 0;
+    // for (int i = 0; i < 256; ++i) {
+    //     float r2 = ((colorPalette[i] & 0xff0000) >> 16) / 255.0f;
+    //     float g2 = ((colorPalette[i] & 0x00ff00) >> 8) / 255.0f;
+    //     float b2 = ((colorPalette[i] & 0x0000ff)) / 255.0f;
 
-        float dist = std::sqrt(std::pow(r2 - r1, 2) +
-                               std::pow(g2 - g1, 2) +
-                               std::pow(b2 - b1, 2));
+    //     float dist = std::sqrt(std::pow(r2 - r1, 2) +
+    //                            std::pow(g2 - g1, 2) +
+    //                            std::pow(b2 - b1, 2));
 
-        if (i == 0 || dist < closestDist) {
-            closestIndex = i;
-            closestDist = dist;
-        }
-    }
+    //     if (i == 0 || dist < closestDist) {
+    //         closestIndex = i;
+    //         closestDist = dist;
+    //     }
+    // }
 
     int offset = (y * mSize.width + x) * 4; // TODO: 4 (RGBA) should not be hard coded
 
-    mData[offset] = (colorPalette[closestIndex] & 0xff0000) >> 16;
-    mData[offset + 1] = (colorPalette[closestIndex] & 0x00ff00) >> 8;
-    mData[offset + 2] = (colorPalette[closestIndex] & 0x0000ff);
+    // mData[offset] = (colorPalette[closestIndex] & 0xff0000) >> 16;
+    // mData[offset + 1] = (colorPalette[closestIndex] & 0x00ff00) >> 8;
+    // mData[offset + 2] = (colorPalette[closestIndex] & 0x0000ff);
+    // mData[offset + 3] = color.a;
+
+    mData[offset] = color.r;
+    mData[offset + 1] = color.g;
+    mData[offset + 2] = color.b;
     mData[offset + 3] = color.a;
 }
 

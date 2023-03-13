@@ -71,4 +71,8 @@ void Game::render() {
 //    return;
     mRaycaster.render(mWindow.getFrameBuffer(), mResourceMgr);
     mMinimap.render(mWindow.getFrameBuffer());
+
+    FrameBuffer &fb = mWindow.getFrameBuffer();
+    fb.filter();
+    // fb
 }

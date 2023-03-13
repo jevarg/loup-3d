@@ -28,6 +28,8 @@ public:
     void
     drawRectangle(const jevarg::vec2<int> &pos, const jevarg::size<int> &size, float angle, const jevarg::color &color);
 
+    void filter();
+
 private:
     std::vector<std::uint8_t> mData;
     jevarg::size<int> mSize;
