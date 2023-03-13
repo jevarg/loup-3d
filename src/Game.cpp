@@ -53,6 +53,22 @@ void Game::update() {
 }
 
 void Game::render() {
+//    FrameBuffer &frameBuffer = mWindow.getFrameBuffer();
+//    for (int i = 0; i < 256; ++i) {
+//        jevarg::color c{
+//                static_cast<uint8_t>((colorPalette[i] & 0xff0000) >> 16),
+//                static_cast<uint8_t>((colorPalette[i] & 0x00ff00) >> 8),
+//                static_cast<uint8_t>(colorPalette[i] & 0x0000ff),
+//                0xff
+//        };
+//
+//        int size = 10;
+//        jevarg::vec2<int> pos{(i * size) % (Config::rendererSize.width - size),
+//                              ((i * size) / (Config::rendererSize.width - size)) * size};
+//
+//        frameBuffer.drawRectangle(pos, {size, size}, c);
+//    }
+//    return;
     mRaycaster.render(mWindow.getFrameBuffer(), mResourceMgr);
     mMinimap.render(mWindow.getFrameBuffer());
 }
